@@ -148,21 +148,6 @@ frozen paper-workflow settings are [Eye Tracking](configs/eye_tracking_final.tom
 [Traffic](configs/traffic_final.toml). Their loaders reject missing and unknown
 keys so protocol changes remain explicit.
 
-For a small Eye-Tracking loader and imputer check using local source data:
-
-```bash
-python scripts/real_data_smoke_test.py \
-  --config configs/reference_benchmark.toml
-```
-
-For the Eye-Tracking source-selection check without creating benchmark files:
-
-```bash
-python scripts/build_eye_tracking_benchmark.py \
-  --config configs/eye_tracking_final.toml \
-  --dry-run
-```
-
 ## Using the preprocessing algorithm
 
 `gap_imputation_benchmark.algorithm` implements a three-stage, provenance-aware
@@ -175,15 +160,6 @@ Use the self-contained synthetic example at
 complete input, configuration, and provenance guide in
 [docs/algorithm_usage.md](docs/algorithm_usage.md). Generated algorithm-example
 outputs are deliberately ignored by Git.
-
-## Extending the benchmark
-
-A new domain provides a `DomainSpec` with its stable feature order, candidate
-methods, and mappings for scale-dependent feature numerators. Domain code owns
-raw-data loading, sampling, and protocol configuration; shared code owns table
-validation, fold-local normalization, grouped evaluation, and artifact
-compatibility checks. Keep the public output contract unchanged unless a
-versioned, documented protocol change requires otherwise.
 
 ## Licence and attribution
 
