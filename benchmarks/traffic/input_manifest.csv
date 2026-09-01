@@ -1,0 +1,5 @@
+district,requested_gaps,generated_gaps,shortfall,source_file
+3,2500,2500,0,interim/largest_flow_panel_selected/district_03_flow_panel.h5
+4,2500,2500,0,interim/largest_flow_panel_selected/district_04_flow_panel.h5
+7,2500,2500,0,interim/largest_flow_panel_selected/district_07_flow_panel.h5
+11,2500,2500,0,interim/largest_flow_panel_selected/district_11_flow_panel.h5

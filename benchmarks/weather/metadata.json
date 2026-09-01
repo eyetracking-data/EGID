@@ -1,0 +1,86 @@
+{
+  "artifact_type": "benchmark",
+  "domain": "weather",
+  "workflow": "weather_benchmark",
+  "dataset_id": "DWD_hourly_temperature",
+  "variable": "TT_TU",
+  "period": {
+    "start": "2000-01-01 00:00",
+    "end": "2025-12-31 23:00"
+  },
+  "sampling_unit": "station_year",
+  "stations": 16,
+  "years_per_station": 26,
+  "requested_gaps": 8320,
+  "generated_gaps": 8283,
+  "excluded_gaps": 37,
+  "gap_strata_hours": [
+    [
+      1,
+      6
+    ],
+    [
+      7,
+      24
+    ],
+    [
+      25,
+      72
+    ],
+    [
+      73,
+      168
+    ],
+    [
+      169,
+      440
+    ]
+  ],
+  "gaps_per_stratum": 4,
+  "method_names": [
+    "forward_fill",
+    "nearest_boundary",
+    "linear",
+    "pchip",
+    "local_natural_cubic_spline",
+    "polyfit_bic",
+    "template",
+    "seasonal_periodic"
+  ],
+  "feature_columns": [
+    "realized_gap_duration_hours",
+    "left_context_valid_fraction",
+    "right_context_valid_fraction",
+    "normalized_boundary_jump",
+    "normalized_mean_difference_right_minus_left",
+    "local_std_over_scale",
+    "local_range_over_scale",
+    "normalized_trend_before",
+    "normalized_trend_after",
+    "normalized_trend_difference",
+    "trend_before_r2",
+    "trend_after_r2",
+    "normalized_median_absolute_velocity_left",
+    "normalized_median_absolute_velocity_right",
+    "normalized_p90_absolute_velocity_left",
+    "normalized_p90_absolute_velocity_right"
+  ],
+  "counts": {
+    "requested_gaps": 8320,
+    "benchmark_rows": 8283,
+    "sampling_exclusions": 37
+  },
+  "method_configuration": {
+    "seasonal_periodic": {
+      "period_strategy": "calendar_year",
+      "period_value": 1,
+      "candidates_per_direction": 3,
+      "min_candidates": 3,
+      "max_offsets": 8,
+      "aggregation": "mean",
+      "leap_day_policy": "skip",
+      "mode": "bidirectional"
+    }
+  },
+  "random_state": 42
+}

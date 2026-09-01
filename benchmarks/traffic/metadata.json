@@ -1,0 +1,92 @@
+{
+  "artifact_type": "benchmark",
+  "domain": "traffic",
+  "workflow": "traffic_benchmark",
+  "sampling_unit": "sensor_x_calendar_year",
+  "districts": [
+    3,
+    4,
+    7,
+    11
+  ],
+  "years": [
+    2017,
+    2018,
+    2019,
+    2020,
+    2021
+  ],
+  "sensors_per_district_year": 100,
+  "gap_strata_steps_inclusive": [
+    [
+      1,
+      3
+    ],
+    [
+      4,
+      12
+    ],
+    [
+      13,
+      36
+    ],
+    [
+      37,
+      144
+    ],
+    [
+      145,
+      288
+    ]
+  ],
+  "interval_minutes": 5,
+  "min_context_valid_fraction": 0.8,
+  "context_policy": "max(gap_length_steps, 2) steps per side",
+  "max_gap_attempts": 500,
+  "random_state": 20260824,
+  "method_names": [
+    "forward_fill",
+    "nearest_boundary",
+    "linear",
+    "pchip",
+    "local_natural_cubic_spline",
+    "polyfit_bic",
+    "template",
+    "seasonal_periodic"
+  ],
+  "feature_columns": [
+    "realized_gap_duration_minutes",
+    "left_context_valid_fraction",
+    "right_context_valid_fraction",
+    "normalized_boundary_jump",
+    "normalized_mean_difference_right_minus_left",
+    "local_std_over_scale",
+    "local_range_over_scale",
+    "normalized_trend_before",
+    "normalized_trend_after",
+    "normalized_trend_difference",
+    "trend_before_r2",
+    "trend_after_r2",
+    "normalized_median_absolute_velocity_left",
+    "normalized_median_absolute_velocity_right",
+    "normalized_p90_absolute_velocity_left",
+    "normalized_p90_absolute_velocity_right"
+  ],
+  "counts": {
+    "requested_gaps": 10000,
+    "benchmark_rows": 10000,
+    "sampling_exclusions": 0
+  },
+  "method_configuration": {
+    "seasonal_periodic": {
+      "period_strategy": "weekly",
+      "candidates_per_direction": 3,
+      "max_offsets": 8,
+      "min_candidates": 3,
+      "aggregation": "median",
+      "mode": "bidirectional"
+    }
+  },
+  "nrmse_scale": "max(IQR(local_context), 0.05 * IQR(full_sensor_series_excluding_artificial_gap))",
+  "generated_gaps": 10000
+}

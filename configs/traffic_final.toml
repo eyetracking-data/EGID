@@ -1,0 +1,12 @@
+# Frozen LargeST 5-minute flow protocol used by the Traffic reference run.
+[benchmark]
+districts = [3, 4, 7, 11]
+years = [2017, 2018, 2019, 2020, 2021]
+sensors_per_district_year = 100
+gap_strata_steps = [[1, 3], [4, 12], [13, 36], [37, 144], [145, 288]]
+min_context_valid_fraction = 0.80
+min_context_steps = 2
+# Kept at 500 to reproduce the historical reference generation exactly.
+max_gap_attempts = 500
+random_state = 20260824
+feature_scale_floor_quantile = 0.01

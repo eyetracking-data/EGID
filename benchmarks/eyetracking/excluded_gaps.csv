@@ -1,0 +1,2 @@
+dataset_id,participant_id,recording_id,source_file,requested_gap_number,duration_stratum,duration_stratum_lower_ms,duration_stratum_upper_ms,requested_gap_duration_ms,attempts_used,reason
+Pedrotti,23,23_trial_059,Pedrotti/23.txt,1,5,200.0,250.0,234.08254028478783,100,no_eligible_nonoverlapping_position_in_duration_stratum

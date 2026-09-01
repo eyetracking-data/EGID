@@ -1,0 +1,8 @@
+selected_method,count,share
+forward_fill,0,0.0
+nearest_boundary,0,0.0
+linear,82,0.05128205128205128
+pchip,1455,0.9099437148217636
+local_natural_cubic_spline,62,0.03877423389618512
+polyfit_bic,0,0.0
+template,0,0.0

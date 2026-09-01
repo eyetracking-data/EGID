@@ -1,0 +1,11 @@
+# Frozen DWD hourly-temperature protocol used by the Weather reference run.
+[benchmark]
+start = "2000-01-01 00:00"
+end = "2025-12-31 23:00"
+gaps_per_stratum = 4
+gap_strata_hours = [[1, 6], [7, 24], [25, 72], [73, 168], [169, 440]]
+min_context_valid_fraction = 0.80
+min_context_samples = 2
+max_gap_attempts = 100
+random_state = 42
+feature_scale_floor_quantile = 0.01

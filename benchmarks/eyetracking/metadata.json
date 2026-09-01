@@ -1,0 +1,83 @@
+{
+  "artifact_type": "benchmark",
+  "domain": "eye_tracking",
+  "workflow": "eye_tracking_benchmark",
+  "config": {
+    "min_gap_duration_ms": 0.0,
+    "max_gap_duration_ms": 250.0,
+    "n_gaps_per_recording": 20,
+    "n_strata": 5,
+    "min_context_valid_fraction": 0.8,
+    "random_state": 42,
+    "participants_per_dataset": 10,
+    "recordings_per_participant": 2,
+    "pedrotti_recordings_per_participant": 40,
+    "pedrotti_gaps_per_participant": 40,
+    "max_gap_sampling_attempts": 100
+  },
+  "random_state": 42,
+  "method_names": [
+    "forward_fill",
+    "nearest_boundary",
+    "linear",
+    "pchip",
+    "local_natural_cubic_spline",
+    "polyfit_bic",
+    "template"
+  ],
+  "feature_columns": [
+    "realized_gap_duration_ms",
+    "left_context_valid_fraction",
+    "right_context_valid_fraction",
+    "normalized_boundary_jump",
+    "normalized_mean_difference_right_minus_left",
+    "local_std_over_scale",
+    "local_range_over_scale",
+    "normalized_trend_before",
+    "normalized_trend_after",
+    "normalized_trend_difference",
+    "trend_before_r2",
+    "trend_after_r2",
+    "normalized_median_absolute_velocity_left",
+    "normalized_median_absolute_velocity_right",
+    "normalized_p90_absolute_velocity_left",
+    "normalized_p90_absolute_velocity_right"
+  ],
+  "counts": {
+    "requested_gaps": 1600,
+    "benchmark_rows": 1599,
+    "sampling_exclusions": 1
+  },
+  "method_configuration": {},
+  "sampling_protocol": "reference_notebook_v1",
+  "requested_gaps": 1600,
+  "sampled_gaps": 1599,
+  "learnable_gaps": 1599,
+  "excluded_gaps": 1,
+  "coverage": [
+    {
+      "dataset_id": "GazeBase",
+      "requested_gaps": 400,
+      "learnable_gaps": 400,
+      "excluded_gaps": 0
+    },
+    {
+      "dataset_id": "GazeBaseVR",
+      "requested_gaps": 400,
+      "learnable_gaps": 400,
+      "excluded_gaps": 0
+    },
+    {
+      "dataset_id": "Pedrotti",
+      "requested_gaps": 400,
+      "learnable_gaps": 399,
+      "excluded_gaps": 1
+    },
+    {
+      "dataset_id": "ZuCo",
+      "requested_gaps": 400,
+      "learnable_gaps": 400,
+      "excluded_gaps": 0
+    }
+  ]
+}

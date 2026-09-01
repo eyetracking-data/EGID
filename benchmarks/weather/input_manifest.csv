@@ -1,0 +1,17 @@
+station_id,source_file,first_timestamp,last_timestamp,n_hourly_rows,natural_missing_hours
+00232,data/weather/processed/temperature_2000_2025/produkt_tu_stunde_19550101_20251231_00232.txt,2000-01-01,2025-12-31 23:00:00,227928,503
+00427,data/weather/processed/temperature_2000_2025/produkt_tu_stunde_19730101_20251231_00427.txt,2000-01-01,2025-12-31 23:00:00,227928,55
+01048,data/weather/processed/temperature_2000_2025/produkt_tu_stunde_19730101_20251231_01048.txt,2000-01-01,2025-12-31 23:00:00,227928,3
+01346,data/weather/processed/temperature_2000_2025/produkt_tu_stunde_19520101_20251231_01346.txt,2000-01-01,2025-12-31 23:00:00,227928,145
+01420,data/weather/processed/temperature_2000_2025/produkt_tu_stunde_19810101_20251231_01420.txt,2000-01-01,2025-12-31 23:00:00,227928,81
+01443,data/weather/processed/temperature_2000_2025/produkt_tu_stunde_19510101_20251231_01443.txt,2000-01-01,2025-12-31 23:00:00,227928,780
+01550,data/weather/processed/temperature_2000_2025/produkt_tu_stunde_19480101_20251231_01550.txt,2000-01-01,2025-12-31 23:00:00,227928,252
+01691,data/weather/processed/temperature_2000_2025/produkt_tu_stunde_19480101_20251231_01691.txt,2000-01-01,2025-12-31 23:00:00,227928,685
+01975,data/weather/processed/temperature_2000_2025/produkt_tu_stunde_19490101_20251231_01975.txt,2000-01-01,2025-12-31 23:00:00,227928,84
+02014,data/weather/processed/temperature_2000_2025/produkt_tu_stunde_19490101_20251231_02014.txt,2000-01-01,2025-12-31 23:00:00,227928,365
+02667,data/weather/processed/temperature_2000_2025/produkt_tu_stunde_19600101_20251231_02667.txt,2000-01-01,2025-12-31 23:00:00,227928,75
+03032,data/weather/processed/temperature_2000_2025/produkt_tu_stunde_19490101_20251231_03032.txt,2000-01-01,2025-12-31 23:00:00,227928,476
+03668,data/weather/processed/temperature_2000_2025/produkt_tu_stunde_19510101_20251231_03668.txt,2000-01-01,2025-12-31 23:00:00,227928,39
+04104,data/weather/processed/temperature_2000_2025/produkt_tu_stunde_19480101_20251231_04104.txt,2000-01-01,2025-12-31 23:00:00,227928,168
+04271,data/weather/processed/temperature_2000_2025/produkt_tu_stunde_19470101_20251231_04271.txt,2000-01-01,2025-12-31 23:00:00,227928,296
+05792,data/weather/processed/temperature_2000_2025/produkt_tu_stunde_19500101_20251231_05792.txt,2000-01-01,2025-12-31 23:00:00,227928,88

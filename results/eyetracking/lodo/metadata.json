@@ -1,0 +1,122 @@
+{
+  "artifact_type": "nested_evaluation",
+  "domain": "eye_tracking",
+  "workflow": "nested_leave_one_dataset_out",
+  "random_state": 42,
+  "benchmark_dir": "benchmarks/eyetracking",
+  "feature_columns": [
+    "realized_gap_duration_ms",
+    "left_context_valid_fraction",
+    "right_context_valid_fraction",
+    "normalized_boundary_jump",
+    "normalized_mean_difference_right_minus_left",
+    "local_std_over_scale",
+    "local_range_over_scale",
+    "normalized_trend_before",
+    "normalized_trend_after",
+    "normalized_trend_difference",
+    "trend_before_r2",
+    "trend_after_r2",
+    "normalized_median_absolute_velocity_left",
+    "normalized_median_absolute_velocity_right",
+    "normalized_p90_absolute_velocity_left",
+    "normalized_p90_absolute_velocity_right"
+  ],
+  "method_names": [
+    "forward_fill",
+    "nearest_boundary",
+    "linear",
+    "pchip",
+    "local_natural_cubic_spline",
+    "polyfit_bic",
+    "template"
+  ],
+  "target_definition": "per-gap normalized RMSE for each candidate method",
+  "selection_rule": "method with smallest predicted nRMSE",
+  "outer_evaluation": {
+    "unit": "dataset",
+    "groups": [
+      "GazeBase",
+      "GazeBaseVR",
+      "Pedrotti",
+      "ZuCo"
+    ],
+    "macro_row": "macro_mean_across_datasets"
+  },
+  "feature_scale_floor": {
+    "source": "learned from each training fold only"
+  },
+  "hyperparameter_candidates": [
+    {
+      "n_estimators": 400,
+      "min_samples_leaf": 5,
+      "max_depth": null,
+      "max_features": "sqrt"
+    },
+    {
+      "n_estimators": 300,
+      "min_samples_leaf": 2,
+      "max_depth": null,
+      "max_features": 1.0
+    },
+    {
+      "n_estimators": 300,
+      "min_samples_leaf": 5,
+      "max_depth": null,
+      "max_features": 1.0
+    },
+    {
+      "n_estimators": 300,
+      "min_samples_leaf": 10,
+      "max_depth": null,
+      "max_features": 1.0
+    },
+    {
+      "n_estimators": 300,
+      "min_samples_leaf": 5,
+      "max_depth": 12,
+      "max_features": 0.7
+    },
+    {
+      "n_estimators": 500,
+      "min_samples_leaf": 2,
+      "max_depth": null,
+      "max_features": 0.7
+    },
+    {
+      "n_estimators": 500,
+      "min_samples_leaf": 10,
+      "max_depth": 12,
+      "max_features": 0.7
+    }
+  ],
+  "selected_parameters_by_outer_group": {
+    "GazeBase": {
+      "n_estimators": 400,
+      "min_samples_leaf": 5,
+      "max_depth": null,
+      "max_features": "sqrt"
+    },
+    "GazeBaseVR": {
+      "n_estimators": 400,
+      "min_samples_leaf": 5,
+      "max_depth": null,
+      "max_features": "sqrt"
+    },
+    "Pedrotti": {
+      "n_estimators": 500,
+      "min_samples_leaf": 10,
+      "max_depth": 12,
+      "max_features": 0.7
+    },
+    "ZuCo": {
+      "n_estimators": 300,
+      "min_samples_leaf": 5,
+      "max_depth": 12,
+      "max_features": 0.7
+    }
+  },
+  "comparison_baselines": {
+    "pchip": "fixed baseline"
+  }
+}

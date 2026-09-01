@@ -1,0 +1,17 @@
+# Final Eye-Tracking benchmark design used by the four-notebook workflow.
+# A zero lower bound denotes the smallest representable artificial gap: one
+# sample. The reference sampler converts a drawn zero duration to the smallest
+# positive floating-point value, matching the original benchmark notebook.
+
+[benchmark]
+min_gap_duration_ms = 0.0
+max_gap_duration_ms = 250.0
+n_gaps_per_recording = 20
+n_strata = 5
+min_context_valid_fraction = 0.80
+random_state = 42
+participants_per_dataset = 10
+recordings_per_participant = 2
+pedrotti_recordings_per_participant = 40
+pedrotti_gaps_per_participant = 40
+max_gap_sampling_attempts = 100

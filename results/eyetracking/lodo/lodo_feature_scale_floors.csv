@@ -1,0 +1,5 @@
+held_out_dataset,training_gaps,evaluation_gaps,feature_scale_floor
+GazeBase,1199,400,0.02101750000000157
+GazeBaseVR,1199,400,0.0195438799999998
+Pedrotti,1200,399,0.010317999999998152
+ZuCo,1199,400,0.010310999999998204

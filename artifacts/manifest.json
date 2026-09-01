@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "repository": "eyetracking-data/EGID",
+  "release_tag": "v0.1.0",
+  "artifacts": {
+    "eye_tracking": {
+      "asset_name": "eye-tracking-selector.joblib",
+      "url": "https://github.com/eyetracking-data/EGID/releases/download/v0.1.0/eye-tracking-selector.joblib",
+      "destination": "artifacts/eyetracking/selector.joblib",
+      "metadata": "artifacts/eyetracking/metadata.json",
+      "size_bytes": 5807894,
+      "sha256": "4f01926e969f7efcec905bed31bf39cf608d70cd9702326e3f229ed75b3d2239"
+    },
+    "traffic": {
+      "asset_name": "traffic-selector.joblib",
+      "url": "https://github.com/eyetracking-data/EGID/releases/download/v0.1.0/traffic-selector.joblib",
+      "destination": "artifacts/traffic/selector.joblib",
+      "metadata": "artifacts/traffic/metadata.json",
+      "size_bytes": 38142538,
+      "sha256": "d3fd76b5ac917487140c005c0a29d75d81fabee6a461df0b94d2be0a100cb42e"
+    },
+    "weather": {
+      "asset_name": "weather-selector.joblib",
+      "url": "https://github.com/eyetracking-data/EGID/releases/download/v0.1.0/weather-selector.joblib",
+      "destination": "artifacts/weather/selector.joblib",
+      "metadata": "artifacts/weather/metadata.json",
+      "size_bytes": 174442414,
+      "sha256": "642b3c907fe453eacdc96b983fe5db28829b804559eea513f5c24943c88c9036"
+    }
+  }
+}

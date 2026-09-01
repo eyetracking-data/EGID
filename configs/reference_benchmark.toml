@@ -1,0 +1,15 @@
+# This configuration reproduces the parameters used by the current smoke test.
+# It is a versioned reference configuration, not a claim to reproduce paper results.
+
+[benchmark]
+random_state = 42
+min_gap_duration_ms = 20.0
+max_gap_duration_ms = 80.0
+n_gaps_per_recording = 8
+n_strata = 4
+context_multiplier = 1.0
+min_context_valid_fraction = 0.80
+train_fraction = 0.70
+validation_fraction = 0.15
+test_fraction = 0.15
+scale_floor_quantile = 0.01

@@ -1,0 +1,36 @@
+# Local configuration may contain machine-specific paths or credentials.
+.env
+
+# Python environments, caches, and build artifacts are recreated locally.
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+build/
+dist/
+*.egg-info/
+
+# Published selector binaries are distributed as GitHub Release assets.
+# Their version and compatibility metadata remain tracked in artifacts/*/metadata.json.
+artifacts/*/selector.joblib
+
+# Jupyter creates these folders automatically.
+.ipynb_checkpoints/
+
+# Raw source data remain outside this repository. Published benchmark tables,
+# result files, and final model artifacts are intentionally versioned.
+data/*
+!data/README.md
+!data/eye_tracking.md
+!data/weather.md
+!data/traffic.md
+!data/person_info_examples/
+!data/person_info_examples/*.json
+
+# Unreviewed local runs are disposable and must not be committed by accident.
+scratch/
+tmp/
+notebooks/algorithm/*/outputs/
+
+# macOS Finder metadata is local to each machine.
+.DS_Store

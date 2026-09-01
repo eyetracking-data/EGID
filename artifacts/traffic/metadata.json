@@ -1,0 +1,59 @@
+{
+  "artifact_type": "selector_artifact",
+  "domain": "traffic",
+  "feature_columns": [
+    "realized_gap_duration_minutes",
+    "left_context_valid_fraction",
+    "right_context_valid_fraction",
+    "normalized_boundary_jump",
+    "normalized_mean_difference_right_minus_left",
+    "local_std_over_scale",
+    "local_range_over_scale",
+    "normalized_trend_before",
+    "normalized_trend_after",
+    "normalized_trend_difference",
+    "trend_before_r2",
+    "trend_after_r2",
+    "normalized_median_absolute_velocity_left",
+    "normalized_median_absolute_velocity_right",
+    "normalized_p90_absolute_velocity_left",
+    "normalized_p90_absolute_velocity_right"
+  ],
+  "method_names": [
+    "forward_fill",
+    "nearest_boundary",
+    "linear",
+    "pchip",
+    "local_natural_cubic_spline",
+    "polyfit_bic",
+    "template",
+    "seasonal_periodic"
+  ],
+  "hyperparameters": {
+    "n_estimators": 300,
+    "min_samples_leaf": 10,
+    "max_depth": null,
+    "max_features": 1.0
+  },
+  "hyperparameter_selection": {
+    "selection_source": "mean inner-LODO nRMSE across completed outer LODO folds",
+    "selected_candidate_index": 3,
+    "mean_inner_lodo_selected_nrmse": 0.4458930124728404
+  },
+  "random_state": 42,
+  "training_rows": 9997,
+  "training_districts": [
+    3,
+    4,
+    7,
+    11
+  ],
+  "target_definition": "absolute eight-method per-gap locally normalised nRMSE",
+  "selection_rule": "method with smallest predicted absolute nRMSE",
+  "model_type": "native shared multi-output RandomForestRegressor",
+  "feature_scale_floor": {
+    "value": 2.5,
+    "quantile": 0.01,
+    "source": "all final-training district gaps"
+  }
+}

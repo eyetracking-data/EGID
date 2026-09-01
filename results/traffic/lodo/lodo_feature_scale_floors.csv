@@ -1,0 +1,5 @@
+outer_target_district,feature_scale_floor,quantile,source
+3,2.75,0.01,outer training districts only
+4,2.5,0.01,outer training districts only
+7,2.5,0.01,outer training districts only
+11,2.4175000000000004,0.01,outer training districts only

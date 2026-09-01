@@ -1,0 +1,12 @@
+{
+  "record_type": "executor_responsible_person_information_example",
+  "is_synthetic_example": true,
+  "person_id": "jenny",
+  "name": "Jenny",
+  "role": "Person responsible for ...",
+  "organisation": "Example Organisation",
+  "contact": {
+    "email": "jenny@example.invalid"
+  },
+  "note": "Replace this synthetic example with the project's approved person-information record."
+}
