@@ -86,8 +86,7 @@ set +a
 ## 3. Run one domain workflow
 
 Open JupyterLab from the repository root with the environment activated. Run
-all cells in each notebook before moving to the next one. The notebooks invoke
-the same canonical code as the scripts and contain no machine-specific paths.
+all cells in each notebook before moving to the next one. The notebooks iuse the same underlying implementation as the scripts and contain no machine-specific paths.
 
 | Domain | Build | Explore | Confirmatory evaluation | Final deployment fit |
 | --- | --- | --- | --- | --- |
@@ -105,82 +104,7 @@ Traffic, set `PREPARE_PANEL = True` only when starting with the raw LargeST
 files; otherwise reuse the prepared selected panel. Eye Tracking reads the raw
 files directly.
 
-## 4. Equivalent command-line workflows
-
-The following commands use the frozen domain configuration. Substitute fresh
-absolute output paths; do not use the versioned reference directories for a
-rerun.
-
-### Eye Tracking
-
-```bash
-python scripts/build_eye_tracking_benchmark.py \
-  --config configs/eye_tracking_final.toml \
-  --output-dir /absolute/path/to/reproduced/benchmarks/eyetracking
-
-python scripts/evaluate_eye_tracking_lodo.py \
-  --benchmark-dir /absolute/path/to/reproduced/benchmarks/eyetracking \
-  --results-dir /absolute/path/to/reproduced/results/eyetracking/lodo
-
-python scripts/train_final_native_7_selector.py \
-  --benchmark-dir /absolute/path/to/reproduced/benchmarks/eyetracking \
-  --artifact-dir /absolute/path/to/reproduced/artifacts/eyetracking
-```
-
-Before a long run, validate source loading and deterministic selection without
-sampling gaps or writing files:
-
-```bash
-python scripts/build_eye_tracking_benchmark.py \
-  --config configs/eye_tracking_final.toml \
-  --dry-run
-```
-
-### Weather
-
-```bash
-python scripts/build_weather_benchmark.py \
-  --config configs/weather_final.toml \
-  --output-dir /absolute/path/to/reproduced/benchmarks/weather
-
-python scripts/evaluate_weather_loso.py \
-  --config configs/weather_final.toml \
-  --benchmark-dir /absolute/path/to/reproduced/benchmarks/weather \
-  --results-dir /absolute/path/to/reproduced/results/weather/loso
-
-python scripts/train_final_weather_selector.py \
-  --config configs/weather_final.toml \
-  --benchmark-dir /absolute/path/to/reproduced/benchmarks/weather \
-  --lodo-results-dir /absolute/path/to/reproduced/results/weather/loso \
-  --artifact-dir /absolute/path/to/reproduced/artifacts/weather
-```
-
-Add `--prepare-data` to the build command only to create the processed station
-files from the raw DWD archives.
-
-### Traffic
-
-```bash
-python scripts/build_traffic_benchmark.py \
-  --config configs/traffic_final.toml \
-  --output-dir /absolute/path/to/reproduced/benchmarks/traffic
-
-python scripts/evaluate_traffic_lodo.py \
-  --config configs/traffic_final.toml \
-  --benchmark-dir /absolute/path/to/reproduced/benchmarks/traffic \
-  --results-dir /absolute/path/to/reproduced/results/traffic/lodo
-
-python scripts/train_final_traffic_selector.py \
-  --config configs/traffic_final.toml \
-  --benchmark-dir /absolute/path/to/reproduced/benchmarks/traffic \
-  --lodo-results-dir /absolute/path/to/reproduced/results/traffic/lodo \
-  --artifact-dir /absolute/path/to/reproduced/artifacts/traffic
-```
-
-Add `--prepare-panel` to the build command only to audit the raw LargeST files
-and rebuild the selected panel.
-
-## 5. Required outputs and interpretation
+## 4. Required outputs and interpretation
 
 The builders validate the complete benchmark-output contract before they
 finish. Every benchmark directory must contain:
@@ -217,7 +141,7 @@ corresponding committed reference outputs. Inspect exclusions and coverage
 before comparing performance. A final selector fitted in stage 4 is a
 deployment model, not a new confirmatory estimate.
 
-## 6. What a reproduction can and cannot establish
+## 5. What a reproduction can and cannot establish
 
 Reproducing the software workflow verifies that the documented code,
 configuration, and external inputs can generate the expected classes of

@@ -2,13 +2,11 @@
 
 This repository contains the reproducible implementation and published derived
 outputs for a benchmark of gap-imputation methods and a gap-specific method
-selector. It evaluates three separate domains—Eye Tracking, Weather, and
-Traffic—using a shared benchmark contract and one domain-specific selector per
-domain.
+selector. It evaluates three separate domains—Eye Tracking, Weather, and Traffic—using a shared benchmark architecture and one domain-specific selector per domain.
 
-The repository contains no raw study data. Raw inputs stay in user-controlled
-external directories; only code, configuration, documentation, derived
-benchmark tables, evaluation outputs, and artifact metadata are versioned.
+
+The repository contains no raw study data. Raw inputs stay in user-controlled external directories; only code, configuration, documentation, derived benchmark tables, evaluation outputs, and artifact metadata are included in the repository.
+
 
 The complete benchmark protocol, including artificial-gap sampling, candidate
 methods, normalization, and grouped evaluation, is specified in
@@ -50,7 +48,7 @@ data/                          External-data documentation only; raw data is ign
 benchmarks/                    Published derived benchmark tables and metadata
 results/                       Published nested-evaluation outputs and metadata
 artifacts/                     Selector metadata; selector binaries are GitHub Release assets
-docs/                          Methods, feature contract, and algorithm usage
+docs/                          Methods, feature definitions, and algorithm usage
 ```
 
 Every domain builder writes the same benchmark-output contract:
@@ -141,7 +139,7 @@ The notebooks are the primary guided interface:
 | Weather | `notebooks/weather/01`–`04` | Station (LOSO) |
 | Traffic | `notebooks/traffic/01`–`04` | District (LODO) |
 
-The canonical implementations are also exposed through the scripts in
+The main implementations are also exposed through the scripts in
 `scripts/`; exact command lines are in [REPRODUCE.md](REPRODUCE.md). The
 frozen paper-workflow settings are [Eye Tracking](configs/eye_tracking_final.toml),
 [Weather](configs/weather_final.toml), and
