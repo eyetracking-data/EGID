@@ -35,7 +35,7 @@ directory.
 | ZuCo 2.0 | [OSF](https://osf.io/2urht/overview) | Normal-reading `*_NR*_ET.mat` files |
 | Pedrotti et al. | [Zenodo](https://zenodo.org/records/7962917) | `Pedrotti/[0-9][0-9].txt` participant files |
 
-All retained recordings are reading tasks. For Pedrotti, word and pseudoword
+This restriction provides a common behavioral context across datasets and avoids mixing reading recordings with unrelated eye-tracking tasks such as fixation, saccade, video-viewing, or gaming paradigms. All retained recordings are reading tasks. For Pedrotti, word and pseudoword
 trials are retained and numeral trials are excluded. The selected ZuCo
 participants are `YAC`, `YAG`, `YAK`, `YDG`, `YDR`, `YFR`, `YFS`, `YHS`, `YIS`,
 and `YLS`.
@@ -49,20 +49,15 @@ coordinate system and does not convert pixels to degrees.
 
 ## Version and license record
 
-Record the release or archive version used for every real run. The GazeBase,
-GazeBaseVR, and Pedrotti records linked above displayed CC BY 4.0 when this
-workflow was documented. Review the current terms of every provider, especially
-ZuCo, before a release.
+For each benchmark run, record the exact source release or archive version used. At the time this workflow was documented, the GazeBase and GazeBaseVR Figshare records were licensed under CC BY 4.0. The Pedrotti dataset is provided through Zenodo, while ZuCo 2.0 is provided through OSF. Users should verify the current licence and access terms of each provider before redistributing source data or publishing a new release.
 
-The linked licence and access information for all four sources was reviewed on
-**2026-09-01**. The release record retains this review date alongside the
-source-specific terms stated above.
+The linked source, licence, and access information was last reviewed on 2026-09-01.
 
 ## Release provenance record
 
 The currently published reference workflow used the local source copies listed
 below. The recorded access/download date for all four Eye-Tracking sources is
-**2026-07-28** (`Europe/Berlin`).
+**2026-07-28**
 
 | Dataset | Source release represented locally | Local source timestamp | Release note |
 | --- | --- | --- | --- |
@@ -71,10 +66,8 @@ below. The recorded access/download date for all four Eye-Tracking sources is
 | ZuCo | ZuCo 2.0 normal-reading `*_NR*_ET.mat` files | 2026-07-28 | Local access/extraction date for the 70 retained MAT files. |
 | Pedrotti et al. | Zenodo record 7962917, participant text files | 2026-07-28 | Local access/extraction date for the 33 files in `Pedrotti/`. |
 
-The concrete ZuCo source used here is the ZuCo 2.0 normal-reading material
-available through the OSF project linked above. The local copy does not retain
-a separate archive-version label beyond this dataset identity; this limitation
-is stated explicitly rather than inferred from file timestamps.
+The ZuCo source used in this workflow is the ZuCo 2.0 normal-reading material available through the OSF project linked above. No separate archive-version identifier was available for the local copy.
+
 
 ## Benchmark design and review outputs
 
