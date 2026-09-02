@@ -86,7 +86,7 @@ set +a
 ## 3. Run one domain workflow
 
 Open JupyterLab from the repository root with the environment activated. Run
-all cells in each notebook before moving to the next one. The notebooks iuse the same underlying implementation as the scripts and contain no machine-specific paths.
+all cells in each notebook before moving to the next one. The notebooks use the same underlying implementation as the scripts and contain no machine-specific paths.
 
 | Domain | Build | Explore | Confirmatory evaluation | Final deployment fit |
 | --- | --- | --- | --- | --- |
@@ -107,17 +107,8 @@ files directly.
 ## 4. Required outputs and interpretation
 
 The builders validate the complete benchmark-output contract before they
-finish. Every benchmark directory must contain:
-
-```text
-learnable_gap_table.csv
-input_manifest.csv
-selected_recordings.csv
-excluded_gaps.csv
-dataset_summary.csv
-coverage_table.csv
-metadata.json
-```
+finish. Its canonical file list and the role of each artifact are defined in
+[docs/methods.md](docs/methods.md#8-exclusions-and-output-artifacts).
 
 Each evaluation directory must contain:
 
@@ -150,5 +141,5 @@ archive versions, extraction state, dependency versions, and platform-level
 numerical behavior. Preserve the source-version record and all generated
 metadata with any rerun.
 
-Follow every upstream data-source licence, attribution requirement, and
+Follow every upstream data-source license, attribution requirement, and
 redistribution restriction before publishing or sharing derived outputs.

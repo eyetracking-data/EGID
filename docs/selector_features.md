@@ -8,7 +8,7 @@ The shared feature implementation is:
 
 The feature extractor operates on a **masked recording** and predefined context windows surrounding a gap. It does **not** access hidden ground-truth values inside the masked interval, candidate reconstruction errors, oracle labels, or dataset/group identifiers.
 
-This document describes the selector input contract, not a performance claim.
+This document describes the selector input contract.
 For the benchmark protocol and grouped evaluation, see
 [methods.md](methods.md); for the released real-data pipeline, see
 [algorithm_usage.md](algorithm_usage.md). The strict feature lists stored in
@@ -53,20 +53,7 @@ The domain contracts are:
 
 The remaining **15 features are shared without a domain-specific rename or unit conversion**.
 
-The corresponding domain contracts are defined in:
-
-- [Eye-tracking adapter](../src/gap_imputation_benchmark/domains/eyetracking/adapter.py) — `EYE_TRACKING_DOMAIN`
-- [Weather adapter](../src/gap_imputation_benchmark/domains/weather/adapter.py) — `WEATHER_FEATURE_COLUMNS`
-- [Traffic adapter](../src/gap_imputation_benchmark/domains/traffic/adapter.py) — `TRAFFIC_FEATURE_COLUMNS`
-
-For benchmark/training feature construction, the explicit duration conversions are implemented in:
-
-- [Weather workflow](../src/gap_imputation_benchmark/domains/weather/workflow.py) — `weather_feature_row(...)`
-- [Traffic workflow](../src/gap_imputation_benchmark/domains/traffic/workflow.py) — `traffic_feature_row(...)`
-
-The runtime missing-value algorithm applies the same domain-specific feature contract before calling the fitted selector:
-
-- [Runtime missing-value handling](../src/gap_imputation_benchmark/algorithm/missing_values.py)
+The corresponding implementation references are consolidated in [Section 9](#9-implementation-reference).
 
 This distinction is important when comparing domains: the **feature semantics
 and extraction logic are shared**, while the physically meaningful
@@ -126,105 +113,13 @@ No additional z-score standardization is applied before Random Forest fitting.
 
 ## 3. Domain-Specific Gap-Duration Feature
 
-The shared extractor first produces
-
-$$
-d_i^{\mathrm{ms}}
-=
-\texttt{realized\_gap\_duration\_ms}.
-$$
-
-The first selector feature is then defined according to domain:
-
-$$
-d_i^{(d)}
-=
-\begin{cases}
-d_i^{\mathrm{ms}},
-& d=\text{eye tracking},\\[4pt]
-\dfrac{d_i^{\mathrm{ms}}}{3{,}600{,}000},
-& d=\text{weather},\\[10pt]
-\dfrac{d_i^{\mathrm{ms}}}{60{,}000},
-& d=\text{traffic}.
-\end{cases}
-$$
-
-Accordingly,
-
-$$
-d_i^{\mathrm{ET}}
-\text{ is measured in milliseconds},
-$$
-
-$$
-d_i^{\mathrm{W}}
-\text{ is measured in hours},
-$$
-
-and
-
-$$
-d_i^{\mathrm{T}}
-\text{ is measured in minutes}.
-$$
-
-This conversion affects **only the gap-duration feature**. It does not alter the context windows or the calculations of the other 15 selector features.
-
-### 3.1 Canonical representation during benchmark construction
-
-The domain workflows construct the gap geometry in the shared canonical representation before feature extraction.
-
-For weather, one hourly sample corresponds to
-
-$$
-3{,}600{,}000\ \mathrm{ms},
-$$
-
-so a gap of $n_i$ hourly samples is represented internally as
-
-$$
-d_i^{\mathrm{ms}}
-=
-n_i\cdot 3{,}600{,}000.
-$$
-
-After shared feature extraction,
-
-$$
-d_i^{\mathrm{W}}
-=
-\frac{d_i^{\mathrm{ms}}}{3{,}600{,}000}.
-$$
-
-For traffic, one five-minute sample corresponds to
-
-$$
-300{,}000\ \mathrm{ms},
-$$
-
-and therefore
-
-$$
-d_i^{\mathrm{ms}}
-=
-n_i\cdot 300{,}000.
-$$
-
-After shared feature extraction,
-
-$$
-d_i^{\mathrm{T}}
-=
-\frac{d_i^{\mathrm{ms}}}{60{,}000}.
-$$
-
-Eye tracking already uses milliseconds as the selector unit, so no conversion is required.
+Feature 1 uses the domain-specific selector representation defined in the Section 1 contract table. The shared extractor stores the canonical duration in milliseconds and converts only this feature before selector training or inference; the context windows and other 15 feature calculations remain unchanged.
 
 ---
 
 ## 4. The 16 Selector Features
 
-The notation $d_i^{(d)}$ below denotes the **domain-specific selector representation** of gap duration defined in Section 3.
+The notation $d_i^{(d)}$ below denotes the **domain-specific selector representation** of gap duration defined in Section 1.
 
 | # | Selector feature | Category | Mathematical definition | Interpretation |
 |---:|---|---|---|---|
@@ -401,6 +296,8 @@ $$
 s_{\mathrm{floor}}
 \right).
 $$
+
+This feature scale is distinct from the nRMSE normalization scale defined in [methods.md](methods.md#4-error-metric-and-oracle).
 
 The local standard-deviation feature is
 

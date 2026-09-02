@@ -51,10 +51,10 @@ artifacts/                     Selector metadata; selector binaries are GitHub R
 docs/                          Methods, feature definitions, and algorithm usage
 ```
 
-Every domain builder writes the same benchmark-output contract:
-`learnable_gap_table.csv`, `input_manifest.csv`, `selected_recordings.csv`,
-`excluded_gaps.csv`, `dataset_summary.csv`, `coverage_table.csv`, and
-`metadata.json`. The exact expected files are also defined in
+Each domain builder produces the same required set of benchmark-output files.
+The required files and their purposes are defined in
+[docs/methods.md](docs/methods.md#8-exclusions-and-output-artifacts) and
+implemented in
 [`src/gap_imputation_benchmark/benchmark/output_contract.py`](src/gap_imputation_benchmark/benchmark/output_contract.py).
 
 ## Installation and verification
@@ -124,23 +124,9 @@ published reference outputs remain unchanged.
 
 ## Reproduction workflows
 
-Each domain follows the same four stages:
-
-1. Build an artificial-gap benchmark from external source data.
-2. Inspect exploratory coverage, candidate errors, and oracle summaries.
-3. Run the confirmatory nested evaluation.
-4. Fit one final deployment selector after completing stage 3.
-
-The notebooks are the primary guided interface:
-
-| Domain | Notebooks | Held-out group |
-| --- | --- | --- |
-| Eye Tracking | `notebooks/eyetracking/01`–`04` | Dataset (LODO) |
-| Weather | `notebooks/weather/01`–`04` | Station (LOSO) |
-| Traffic | `notebooks/traffic/01`–`04` | District (LODO) |
-
-The main implementations are also exposed through the scripts in
-`scripts/`; exact command lines are in [REPRODUCE.md](REPRODUCE.md). The
+The canonical notebook sequence and command-line instructions are in
+[REPRODUCE.md](REPRODUCE.md). The main implementations are also exposed through
+the scripts in `scripts/`. The
 frozen paper-workflow settings are [Eye Tracking](configs/eye_tracking_final.toml),
 [Weather](configs/weather_final.toml), and
 [Traffic](configs/traffic_final.toml). Their loaders reject missing and unknown
@@ -162,6 +148,6 @@ outputs are deliberately ignored by Git.
 ## Licence and attribution
 
 The source code is licensed under the [MIT License](LICENSE). Derived tables,
-results, and model artifacts remain subject to the licences and attribution
+results, and model artifacts remain subject to the licenses and attribution
 requirements of their external data sources. Consult the relevant guide under
 [data/](data/) before reusing or redistributing a derived output.

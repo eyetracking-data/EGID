@@ -1,10 +1,10 @@
 # Benchmark and evaluation methods
 
-This document is the implementation-facing methods specification for the
-released gap-imputation benchmark and the nested evaluation of adaptive
-method selection. It states the intended protocol; the
-strict domain configurations and generated metadata are authoritative whenever
-they differ from prose or a historical result.
+This document specifies the intended benchmark and evaluation protocol.
+For any specific published run, the corresponding strict domain configuration
+and generated `metadata.json` are the authoritative records of the settings
+actually used. If they differ from this document or from historical outputs,
+use those run-specific records.
 
 The benchmark evaluates univariate horizontal gaze position, hourly air
 temperature, and five-minute traffic flow. Its aim is not to train one
@@ -241,7 +241,7 @@ duration strata from 0 to 250 ms, for 1,600 requested gaps across the domain
 before exclusions. The portfolio contains the seven common methods.
 
 The frozen settings are in `configs/eye_tracking_final.toml`; source selection,
-task restrictions, and data provenance are in [data/eye_tracking.md](../data/eye_tracking.md).
+task restrictions, and data details are in [data/eye_tracking.md](../data/eye_tracking.md).
 
 ### Weather
 
@@ -254,7 +254,7 @@ exclusions.
 
 The portfolio contains the seven shared methods plus calendar-aligned seasonal
 reconstruction. The frozen settings are in `configs/weather_final.toml`; input
-preparation, station selection, and source provenance are in
+preparation, station selection, and source details are in
 [data/weather.md](../data/weather.md).
 
 ### Traffic
@@ -272,7 +272,7 @@ requests 10,000 gaps before exclusions. The portfolio contains the seven
 shared methods plus weekly seasonal reconstruction.
 
 The frozen settings are in `configs/traffic_final.toml`; sensor auditing,
-selected-panel construction, and source provenance are in
+selected-panel construction, and source details are in
 [data/traffic.md](../data/traffic.md).
 
 ## 7. Nested group-wise evaluation
@@ -329,8 +329,7 @@ access to raw study data.
 
 ## 9. Reproduction entry points
 
-The reproduction sequence is documented in
-[REPRODUCE.md](../REPRODUCE.md). It runs the four notebooks for each domain in
-order: build the benchmark, inspect exploratory results, perform nested
-evaluation, and fit the final selector. External raw-data requirements remain
-in the individual files below `data/`.
+The canonical reproduction sequence, including the domain-specific notebook
+paths and command-line entry points, is documented in
+[REPRODUCE.md](../REPRODUCE.md). External raw-data requirements remain in the
+individual files below `data/`.

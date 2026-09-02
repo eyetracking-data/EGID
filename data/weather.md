@@ -57,28 +57,18 @@ Place the listed ZIP archives in `raw/`. Notebook 01 extracts them to
 
 ## Version and license record
 
-The DWD CDC [terms of use](https://opendata.dwd.de/climate_environment/CDC/Terms_of_use.pdf)
-state that CDC OpenData is available under
-[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Cite DWD/CDC, link
-the license, and state that the data were restricted to 2000–2025 and missing
-values were recoded. Record the download date and archive names for a release.
+According to the DWD CDC [terms of use](https://opendata.dwd.de/climate_environment/CDC/Terms_of_use.pdf), data provided through the CDC OpenData area are available under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
-The DWD CDC terms and CC BY 4.0 licence information linked above were reviewed
-on **2026-09-01**.
+Users should attribute DWD/CDC when using these data. For reproducibility, releases based on this workflow should also document the source archives and download date, the restriction to the years 2000–2025, and the recoding of source missing-value indicators described above.
+
+The linked DWD CDC terms and CC BY 4.0 license information were last reviewed on **2026-09-02**.
 
 ## Release provenance record
 
-The reference workflow used the 16 DWD ZIP archives named in the station table
-above. All 16 local archive files have a filesystem modification timestamp of
-**2026-08-18 10:47:08 +02:00** (`Europe/Berlin`). This is the best available
-local proxy for their acquisition date; it is not a provider-issued download
-receipt. The files were extracted locally on 2026-08-18 and the processed
-station files were written immediately afterwards.
+The reference workflow used the 16 DWD ZIP archives listed in the station table above. The recorded access date for these source archives is **2026-08-18**.
 
-The archive filenames include the historical coverage endpoint
-`20251231`, and the workflow restricts the analysis interval to
-2000-01-01 00:00 through 2025-12-31 23:00. The source is the DWD historical
-hourly air-temperature archive linked above; its published terms are CC BY 4.0.
+The archive filenames indicate historical coverage through `20251231`, and the workflow restricts the analysis period to `2000-01-01 00:00` through `2025-12-31 23:00`. The source data were obtained from the DWD historical hourly air-temperature archive linked above.
+
 
 ## Benchmark design and review outputs
 
@@ -86,15 +76,11 @@ hourly air-temperature archive linked above; its published terms are CC BY 4.0.
 station-year in five hourly strata (1–6, 7–24, 25–72, 73–168, 169–440 hours).
 This requests 8,320 gaps; the reference run contains 8,283 generated gaps.
 
-Every benchmark directory contains `learnable_gap_table.csv`,
-`input_manifest.csv`, `selected_recordings.csv`, `excluded_gaps.csv`,
-`dataset_summary.csv`, `coverage_table.csv`, and `metadata.json`.
+The benchmark-output contract is defined in
+[docs/methods.md](../docs/methods.md#8-exclusions-and-output-artifacts).
 
 ## Running the workflow
 
-Run these notebooks in order from the repository root:
-
-1. `notebooks/weather/01_build_benchmark.ipynb`
-2. `notebooks/weather/02_exploratory_analysis.ipynb`
-3. `notebooks/weather/03_nested_loso_evaluation.ipynb`
-4. `notebooks/weather/04_train_final_selector.ipynb`
+Follow the canonical notebook sequence in
+[REPRODUCE.md](../REPRODUCE.md#3-run-one-domain-workflow), using the Weather
+notebooks in `notebooks/weather/`.

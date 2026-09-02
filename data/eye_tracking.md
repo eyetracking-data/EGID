@@ -49,9 +49,9 @@ coordinate system and does not convert pixels to degrees.
 
 ## Version and license record
 
-For each benchmark run, record the exact source release or archive version used. At the time this workflow was documented, the GazeBase and GazeBaseVR Figshare records were licensed under CC BY 4.0. The Pedrotti dataset is provided through Zenodo, while ZuCo 2.0 is provided through OSF. Users should verify the current licence and access terms of each provider before redistributing source data or publishing a new release.
+For each benchmark run, record the exact source release or archive version used. At the time this workflow was documented, the GazeBase and GazeBaseVR Figshare records were licensed under CC BY 4.0. The Pedrotti dataset is provided through Zenodo, while ZuCo 2.0 is provided through OSF. Users should verify the current license and access terms of each provider before redistributing source data or publishing a new release.
 
-The linked source, licence, and access information was last reviewed on 2026-09-01.
+The linked source, license, and access information was last reviewed on 2026-09-01.
 
 ## Release provenance record
 
@@ -76,15 +76,11 @@ dataset, two recordings per participant for GazeBase, GazeBaseVR, and ZuCo,
 and 40 Pedrotti trials per participant. It requests 400 gaps per dataset in
 five strata between 0 and 250 ms (1,600 in total before exclusions).
 
-Every benchmark directory contains `learnable_gap_table.csv`,
-`input_manifest.csv`, `selected_recordings.csv`, `excluded_gaps.csv`,
-`dataset_summary.csv`, `coverage_table.csv`, and `metadata.json`.
+The benchmark-output contract is defined in
+[docs/methods.md](../docs/methods.md#8-exclusions-and-output-artifacts).
 
 ## Running the workflow
 
-Run these notebooks in order from the repository root:
-
-1. `notebooks/eyetracking/01_build_benchmark.ipynb`
-2. `notebooks/eyetracking/02_exploratory_analysis.ipynb`
-3. `notebooks/eyetracking/03_nested_lodo_evaluation.ipynb`
-4. `notebooks/eyetracking/04_train_final_selector.ipynb`
+Follow the canonical notebook sequence in
+[REPRODUCE.md](../REPRODUCE.md#3-run-one-domain-workflow), using the Eye-Tracking
+notebooks in `notebooks/eyetracking/`.

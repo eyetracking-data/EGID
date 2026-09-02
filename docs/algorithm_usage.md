@@ -177,11 +177,6 @@ IMPUTE_OUTSIDE_VALIDATED_GAP_RANGE = False
 
 # Human-readable provenance fields. Information files are optional JSON/text
 # files and may be absolute paths. Set fields to None if unavailable.
-# The current provenance schema records executor and responsible-person fields;
-# dataset-creator fields are accepted by the API but should also be stated in
-# COMMENT because they are not yet emitted in the JSON report.
-DATASET_CREATOR = "Name of data creator"
-DATASET_CREATOR_INFO_PATH = Path("/absolute/path/to/dataset_creator_info.json")
 EXECUTOR_NAME = "Name of person running this notebook"
 EXECUTOR_INFO_PATH = Path("/absolute/path/to/executor_info.json")
 RESPONSIBLE_PERSON_NAME = "Name of responsible person"
@@ -220,8 +215,6 @@ config = DomainImputationConfig(
 )
 
 run_metadata = RunMetadata(
-    dataset_creator=DATASET_CREATOR,
-    dataset_creator_info_path=DATASET_CREATOR_INFO_PATH,
     executor_name=EXECUTOR_NAME,
     executor_info_path=EXECUTOR_INFO_PATH,
     executor_responsible_person=RESPONSIBLE_PERSON_NAME,
@@ -292,7 +285,6 @@ Typical non-filled outcomes are insufficient context at a series edge, less than
 
 | Field | Recorded purpose |
 | --- | --- |
-| `dataset_creator` / `dataset_creator_info_path` | Reserved API fields for dataset-creator information. The current provenance schema does not emit them; record this information in `comment` or alongside the input until that schema is extended. |
 | `executor_name` / `executor_info_path` | Person or system that executed the run. If no name is supplied, the local user name is recorded. |
 | `executor_responsible_person` / `executor_responsible_person_info_path` | Optional responsible person. |
 | `execution_notebook_path` | Notebook or script that initiated the run. |
