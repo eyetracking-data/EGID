@@ -319,7 +319,11 @@ The top-level provenance JSON has four sections:
 | `activities` | Separate records for outlier detection, missing-value imputation, and standardization. |
 | `summary` | Counts of gaps before outlier processing, after outlier processing, filled gaps, and skipped gaps. |
 
-The `activities.missing_value_imputation.details.gaps` list is the per-gap audit trail. Its `status` is `filled` when the primary recommendation was applied, `fallback` when a lower-ranked candidate was applied, or `skipped` when no imputation was performed. Each `attempted_methods` item records `outcome` as `applied`, `not_applicable`, `invalid_prediction`, or `exception`; `reason` is `null` only for `applied`. For each gap, inspect `reason` when skipped, `fallback_reason` when applicable, `within_validated_gap_duration_range`, `model_recommended_method`, `predicted_method_nrmse`, `attempted_methods`, `used_method`, and any method-specific diagnostics. This list is the authoritative report of what the algorithm did to every gap.
+The `activities.missing_value_imputation.details.gaps` list is the per-gap audit trail. Its `status` is `success` when the primary recommendation was applied, `fallback` when a lower-ranked candidate was applied, or `skip` when no imputation was performed. An `attempted_methods` entry has `applicable: true` and `reason: null` only when it produced the finite reconstruction that was applied; otherwise it has `applicable: false` and a concrete reason. For each gap, inspect `reason` when skipped, `fallback_reason` when applicable, `within_validated_gap_duration_range`, `model_recommended_method`, `predicted_method_nrmse`, `attempted_methods`, `used_method`, and any method-specific diagnostics. This list is the authoritative report of what the algorithm did to every gap.
+
+`activities.missing_value_imputation.details.candidate_portfolio` records the ordered methods considered by the selector once per run. It belongs to the adjacent `imputation_model` record and therefore applies to every decision in `gaps`; no portfolio checksum or per-gap copy is written.
+
+For every gap where the random-forest selector is evaluated, `candidate_ranking` stores the candidate methods in ascending order of `predicted_method_nrmse`; its first element is the `model_recommended_method`. Equal predicted errors are ordered by the run-level `candidate_portfolio`, which makes ties deterministic without repeating the error values.
 
 The following notebook cell prints a compact completion report after a run:
 

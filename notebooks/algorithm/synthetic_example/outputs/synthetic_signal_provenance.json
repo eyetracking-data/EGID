@@ -1,25 +1,25 @@
 {
   "run": {
-    "run_id": "run-20260901T104312+0200-1f0759af",
-    "started_at": "2026-09-01T10:43:12.195034+02:00",
-    "finished_at": "2026-09-01T10:43:13.279852+02:00",
-    "duration_seconds": 1.084818,
+    "run_id": "run-20260903T222217+0200-ea380b5b",
+    "started_at": "2026-09-03T22:22:17.706701+02:00",
+    "finished_at": "2026-09-03T22:22:18.785457+02:00",
+    "duration_seconds": 1.078756,
     "pipeline_implementation": {
       "path": "src/gap_imputation_benchmark/algorithm/rf_domain_imputation.py",
       "sha256": "72841338c8567f5bc09db435ec74d966baaa27fecd4bdd98b83aa4daacdcfb25"
     },
     "execution_notebook": {
-      "path": "notebooks/algorithm/01_example_pipeline_call.ipynb",
+      "path": "notebooks/algorithm/synthetic_example/01_example_pipeline_call.ipynb",
       "format": "ipynb",
-      "size_bytes": 4468,
-      "modified_at": "2026-09-01T10:42:40.760766+02:00",
-      "sha256": "2a17ef62faf79b5a5749b08e23b8533b841bcd910ceb918487dbca7ecc988efd"
+      "size_bytes": 4711,
+      "modified_at": "2026-09-03T22:05:40.440675+02:00",
+      "sha256": "9c9b6d3f3cfdb56688dfd467e965e9a2eddb00bd638cbc74c89b054bdc895794"
     },
     "configuration_file": {
-      "path": "notebooks/algorithm/outputs/synthetic_signal_provenance_logs/run-20260901T104312+0200-1f0759af/configuration.txt",
+      "path": "notebooks/algorithm/synthetic_example/outputs/synthetic_signal_provenance_logs/run-20260903T222217+0200-ea380b5b/configuration.txt",
       "format": "txt",
       "size_bytes": 326,
-      "modified_at": "2026-09-01T10:43:12.196239+02:00",
+      "modified_at": "2026-09-03T22:22:17.708266+02:00",
       "sha256": "5f98792622485b8ae0690ee8e76d8427366b2629d4092d04598291caa90f5457"
     },
     "comment": "Test"
@@ -60,20 +60,20 @@
   "activities": {
     "outlier_detection": {
       "metadata_file": {
-        "path": "notebooks/algorithm/outputs/synthetic_signal_provenance_logs/run-20260901T104312+0200-1f0759af/outlier_metadata.json",
+        "path": "notebooks/algorithm/synthetic_example/outputs/synthetic_signal_provenance_logs/run-20260903T222217+0200-ea380b5b/outlier_metadata.json",
         "format": "json",
-        "size_bytes": 999,
-        "modified_at": "2026-09-01T10:43:12.200193+02:00",
-        "sha256": "a88bce4189b495f8240c150f8c07a1246f0cd13535a3a41e13721677bb8e8b8d"
+        "size_bytes": 1017,
+        "modified_at": "2026-09-03T22:22:17.711706+02:00",
+        "sha256": "ced29eeeb21164c3ff5d9fb3062d7fbc458f140dc608dc146d9dcca6b968d1c9"
       },
       "implementation": {
         "path": "src/gap_imputation_benchmark/algorithm/outlier.py",
         "sha256": "c988dc96fec1eb3431f4dce4505400b9566f7f72d3899f12e7bd9401661b2b32"
       },
       "timing": {
-        "started_at": "2026-09-01T10:43:12.196765+02:00",
-        "finished_at": "2026-09-01T10:43:12.198876+02:00",
-        "duration_seconds": 0.002111
+        "started_at": "2026-09-03T22:22:17.708602+02:00",
+        "finished_at": "2026-09-03T22:22:17.710510+02:00",
+        "duration_seconds": 0.001908
       },
       "details": {
         "method": "zscore",
@@ -90,30 +90,30 @@
           "modified_at": null
         },
         "file_after_outlier_detection": {
-          "path": "notebooks/algorithm/outputs/synthetic_signal_imputed_after_outlier_detection.csv",
+          "path": "notebooks/algorithm/synthetic_example/outputs/synthetic_signal_imputed_after_outlier_detection.csv",
           "format": "csv",
           "size_bytes": 5821,
-          "modified_at": "2026-09-01T10:43:12.198852+02:00",
+          "modified_at": "2026-09-03T22:22:17.710483+02:00",
           "sha256": "1778b8ade8b6ecf732b40cdb96d46f4440ee8c5215b2bed200b5c3c25abad49c"
         }
       }
     },
     "missing_value_imputation": {
       "metadata_file": {
-        "path": "notebooks/algorithm/outputs/synthetic_signal_provenance_logs/run-20260901T104312+0200-1f0759af/missing_value_metadata.json",
+        "path": "notebooks/algorithm/synthetic_example/outputs/synthetic_signal_provenance_logs/run-20260903T222217+0200-ea380b5b/missing_value_metadata.json",
         "format": "json",
-        "size_bytes": 4501,
-        "modified_at": "2026-09-01T10:43:13.277111+02:00",
-        "sha256": "4b80ffcb0661ec30650e682cda84ae5c07c4a926f4328eb933e24d8a44ecb8ae"
+        "size_bytes": 5369,
+        "modified_at": "2026-09-03T22:22:18.782389+02:00",
+        "sha256": "d70dc2e150f945e686eb485a55bd0b11654866d57e79fae81ce86a529cef6165"
       },
       "implementation": {
         "path": "src/gap_imputation_benchmark/algorithm/missing_values.py",
-        "sha256": "d35c9465ca669e1214647da8f4e3745e8ce921f1b2da21742a533006cfaf8cb0"
+        "sha256": "60ef734a1be584b9bf9d760e1bed48528c69a1050ca02763d65d613e55e5e3ef"
       },
       "timing": {
-        "started_at": "2026-09-01T10:43:12.200225+02:00",
-        "finished_at": "2026-09-01T10:43:13.274529+02:00",
-        "duration_seconds": 1.074304
+        "started_at": "2026-09-03T22:22:17.711723+02:00",
+        "finished_at": "2026-09-03T22:22:18.779598+02:00",
+        "duration_seconds": 1.067875
       },
       "details": {
         "imputation_model": {
@@ -123,6 +123,26 @@
           "modified_at": "2026-09-01T10:28:18.746549+02:00",
           "sha256": "4f01926e969f7efcec905bed31bf39cf608d70cd9702326e3f229ed75b3d2239"
         },
+        "candidate_portfolio": [
+          "forward_fill",
+          "nearest_boundary",
+          "linear",
+          "pchip",
+          "local_natural_cubic_spline",
+          "polyfit_bic",
+          "template"
+        ],
+        "selector_feature_specification": {
+          "definition": {
+            "path": "docs/selector_features.md",
+            "sha256": "2b5a78531e9bf29e661ea0da8de85f74ef4daf320843bc9056ce30426f47f6ec"
+          },
+          "extraction_implementation": {
+            "path": "src/gap_imputation_benchmark/benchmark/features.py",
+            "callable": "extract_basic_gap_features",
+            "sha256": "02fd649a4938260b3f69a4be7c9a8c1252017dca63394faa840791d0ea646771"
+          }
+        },
         "gap_count": 1,
         "gaps": [
           {
@@ -130,26 +150,7 @@
             "gap_start_idx_inclusive": 150,
             "gap_end_idx_exclusive": 152,
             "gap_length_samples": 2,
-            "realized_gap_duration_ms": 2.0,
             "within_validated_gap_duration_range": true,
-            "gap_characteristics": {
-              "realized_gap_duration_ms": 2.0,
-              "left_context_valid_fraction": 1.0,
-              "right_context_valid_fraction": 1.0,
-              "normalized_boundary_jump": 0.8573711818606292,
-              "normalized_mean_difference_right_minus_left": 1.1426288181393678,
-              "local_std_over_scale": 0.5895494655462371,
-              "local_range_over_scale": 1.4278864544181065,
-              "normalized_trend_before": 227.79674344270774,
-              "normalized_trend_after": 342.71852911476554,
-              "normalized_trend_difference": 114.9217856720578,
-              "trend_before_r2": 1.0,
-              "trend_after_r2": 1.0,
-              "normalized_median_absolute_velocity_left": 227.79674344271177,
-              "normalized_median_absolute_velocity_right": 342.718529114765,
-              "normalized_p90_absolute_velocity_left": 227.79674344271177,
-              "normalized_p90_absolute_velocity_right": 342.718529114765
-            },
             "feature_diagnostics": {
               "local_iqr": 0.0369141449996383,
               "local_std": 0.021762714455633058,
@@ -170,16 +171,43 @@
               "p90_absolute_velocity_left": 8.408922017889667,
               "p90_absolute_velocity_right": 12.651161477805195
             },
+            "gap_characteristics": {
+              "realized_gap_duration_ms": 2.0,
+              "left_context_valid_fraction": 1.0,
+              "right_context_valid_fraction": 1.0,
+              "normalized_boundary_jump": 0.8573711818606292,
+              "normalized_mean_difference_right_minus_left": 1.1426288181393678,
+              "local_std_over_scale": 0.5895494655462371,
+              "local_range_over_scale": 1.4278864544181065,
+              "normalized_trend_before": 227.79674344270774,
+              "normalized_trend_after": 342.71852911476554,
+              "normalized_trend_difference": 114.9217856720578,
+              "trend_before_r2": 1.0,
+              "trend_after_r2": 1.0,
+              "normalized_median_absolute_velocity_left": 227.79674344271177,
+              "normalized_median_absolute_velocity_right": 342.718529114765,
+              "normalized_p90_absolute_velocity_left": 227.79674344271177,
+              "normalized_p90_absolute_velocity_right": 342.718529114765
+            },
             "selection_mode": "random_forest",
             "predicted_method_nrmse": {
-              "forward_fill": 0.0835156279859251,
-              "nearest_boundary": 0.06012063343366387,
-              "linear": 0.021279763924707325,
+              "forward_fill": 0.08351562798592507,
+              "nearest_boundary": 0.060120633433663855,
+              "linear": 0.021279763924707328,
               "pchip": 0.016821904131031247,
               "local_natural_cubic_spline": 0.015855446153832237,
               "polyfit_bic": 0.022651475030366502,
               "template": 0.023262862056541177
             },
+            "candidate_ranking": [
+              "local_natural_cubic_spline",
+              "pchip",
+              "linear",
+              "polyfit_bic",
+              "template",
+              "nearest_boundary",
+              "forward_fill"
+            ],
             "model_recommended_method": "local_natural_cubic_spline",
             "attempted_methods": [
               {
@@ -189,7 +217,7 @@
               }
             ],
             "used_method": "local_natural_cubic_spline",
-            "status": "filled",
+            "status": "success",
             "left_support_point_count": 2,
             "right_support_point_count": 2,
             "support_point_count": 4,
@@ -203,37 +231,37 @@
         "filled_gap_count": 1,
         "skipped_gap_count": 0,
         "input_file": {
-          "path": "notebooks/algorithm/outputs/synthetic_signal_imputed_after_outlier_detection.csv",
+          "path": "notebooks/algorithm/synthetic_example/outputs/synthetic_signal_imputed_after_outlier_detection.csv",
           "format": "csv",
           "size_bytes": 5821,
-          "modified_at": "2026-09-01T10:43:12.198852+02:00",
+          "modified_at": "2026-09-03T22:22:17.710483+02:00",
           "sha256": "1778b8ade8b6ecf732b40cdb96d46f4440ee8c5215b2bed200b5c3c25abad49c"
         },
         "file_after_missing_value_imputation": {
-          "path": "notebooks/algorithm/outputs/synthetic_signal_imputed_after_missing_value_imputation.csv",
+          "path": "notebooks/algorithm/synthetic_example/outputs/synthetic_signal_imputed_after_missing_value_imputation.csv",
           "format": "csv",
           "size_bytes": 5855,
-          "modified_at": "2026-09-01T10:43:13.274437+02:00",
+          "modified_at": "2026-09-03T22:22:18.779543+02:00",
           "sha256": "c953342a861fec0527d7ce016772950ec240b136f06225e07aa163c861647c15"
         }
       }
     },
     "standardization": {
       "metadata_file": {
-        "path": "notebooks/algorithm/outputs/synthetic_signal_provenance_logs/run-20260901T104312+0200-1f0759af/standardization_metadata.json",
+        "path": "notebooks/algorithm/synthetic_example/outputs/synthetic_signal_provenance_logs/run-20260903T222217+0200-ea380b5b/standardization_metadata.json",
         "format": "json",
-        "size_bytes": 1164,
-        "modified_at": "2026-09-01T10:43:13.279833+02:00",
-        "sha256": "ea48ce45e8b5706096ed7bd43b34efc11f5a66c6ff3a8ccd1363609dce8f35ff"
+        "size_bytes": 1200,
+        "modified_at": "2026-09-03T22:22:18.785436+02:00",
+        "sha256": "0053eb954da847afb77ca21bc9bc0a4a9a13c4288f6902393d7e8a2e060f61de"
       },
       "implementation": {
         "path": "src/gap_imputation_benchmark/algorithm/standardization.py",
         "sha256": "605f65844babe00b211646e105d74d4cdbef60725402c5cf331ad987428aaf3d"
       },
       "timing": {
-        "started_at": "2026-09-01T10:43:13.277156+02:00",
-        "finished_at": "2026-09-01T10:43:13.278408+02:00",
-        "duration_seconds": 0.001252
+        "started_at": "2026-09-03T22:22:18.782421+02:00",
+        "finished_at": "2026-09-03T22:22:18.783387+02:00",
+        "duration_seconds": 0.000966
       },
       "details": {
         "method": "zscore",
@@ -244,17 +272,17 @@
           "std": 0.6654547555574319
         },
         "input_file": {
-          "path": "notebooks/algorithm/outputs/synthetic_signal_imputed_after_missing_value_imputation.csv",
+          "path": "notebooks/algorithm/synthetic_example/outputs/synthetic_signal_imputed_after_missing_value_imputation.csv",
           "format": "csv",
           "size_bytes": 5855,
-          "modified_at": "2026-09-01T10:43:13.274437+02:00",
+          "modified_at": "2026-09-03T22:22:18.779543+02:00",
           "sha256": "c953342a861fec0527d7ce016772950ec240b136f06225e07aa163c861647c15"
         },
         "file_after_standardization": {
-          "path": "notebooks/algorithm/outputs/synthetic_signal_imputed.csv",
+          "path": "notebooks/algorithm/synthetic_example/outputs/synthetic_signal_imputed.csv",
           "format": "csv",
           "size_bytes": 5850,
-          "modified_at": "2026-09-01T10:43:13.278378+02:00",
+          "modified_at": "2026-09-03T22:22:18.783354+02:00",
           "sha256": "c55c4b832261c5359d1b59098b15e7dc0e1b44d078fbb939911da100e73287fb"
         }
       }

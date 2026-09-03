@@ -39,6 +39,25 @@ _METHODS = {
 }
 
 
+def _selector_feature_specification() -> dict[str, Any]:
+    """Return portable, content-addressed references for selector features."""
+    project_root = Path(__file__).resolve().parents[3]
+    definition_path = project_root / "docs" / "selector_features.md"
+    implementation_path = project_root / "src" / "gap_imputation_benchmark" / "benchmark" / "features.py"
+
+    return {
+        "definition": {
+            "path": "docs/selector_features.md",
+            "sha256": file_metadata(definition_path)["sha256"],
+        },
+        "extraction_implementation": {
+            "path": "src/gap_imputation_benchmark/benchmark/features.py",
+            "callable": "extract_basic_gap_features",
+            "sha256": file_metadata(implementation_path)["sha256"],
+        },
+    }
+
+
 def _find_gaps(values: np.ndarray) -> list[tuple[int, int]]:
     missing = ~np.isfinite(values)
     starts = np.flatnonzero(missing & np.r_[True, ~missing[:-1]])
@@ -141,6 +160,16 @@ def _predict_method(artifact: dict[str, Any], feature_values: dict[str, float]) 
     return methods[int(np.argmin(scores))], predicted_scores
 
 
+def _rank_candidates(predicted_scores: dict[str, float], candidate_portfolio: list[str]) -> list[str]:
+    """Rank candidates by predicted error with portfolio order as tie-breaker."""
+    if set(predicted_scores) != set(candidate_portfolio):
+        raise ValueError("Predicted methods do not match the selector candidate portfolio.")
+    indexed_portfolio = enumerate(candidate_portfolio)
+    return [method for _, method in sorted(
+        indexed_portfolio, key=lambda item: (predicted_scores[item[1]], item[0]),
+    )]
+
+
 def _apply_method(method: str, runtime: ArtificialGap, domain_policy: dict[str, Any]):
     if method == "seasonal_periodic":
         seasonal_config = domain_policy.get("seasonal_config")
@@ -215,7 +244,7 @@ def _impute_values(frame: pd.DataFrame, value_col: str, config: Any) -> tuple[np
         entry: dict[str, Any] = {"gap_number": gap_number, "gap_start_idx_inclusive": start,
                                  "gap_end_idx_exclusive": end, "gap_length_samples": end - start}
         if candidate is None:
-            entry.update({"status": "skipped", "reason": reason,
+            entry.update({"status": "skip", "reason": reason,
                           "model_recommended_method": None, "used_method": None})
             if reason == "insufficient_valid_context":
                 entry["realized_gap_duration_ms"] = float(timestamps_ms[end] - timestamps_ms[start])
@@ -227,10 +256,9 @@ def _impute_values(frame: pd.DataFrame, value_col: str, config: Any) -> tuple[np
         validated_range = domain_policy["validated_gap_duration_range_ms"]
         in_validated_range = (None if validated_range is None else
                               validated_range[0] <= candidate.realized_gap_duration_ms <= validated_range[1])
-        entry.update({"realized_gap_duration_ms": candidate.realized_gap_duration_ms,
-                      "within_validated_gap_duration_range": in_validated_range})
+        entry["within_validated_gap_duration_range"] = in_validated_range
         if in_validated_range is False and not config.impute_outside_validated_gap_range:
-            entry.update({"status": "skipped", "reason": "outside_validated_gap_duration_range",
+            entry.update({"status": "skip", "reason": "outside_validated_gap_duration_range",
                           "model_recommended_method": None, "used_method": None})
             logs.append(entry)
             continue
@@ -239,7 +267,7 @@ def _impute_values(frame: pd.DataFrame, value_col: str, config: Any) -> tuple[np
                        _scale_floor_from_recording(normalization_reference_values,
                                                    float(domain_policy["scale_floor_recording_iqr_fraction"])))
         if scale_floor is None:
-            entry.update({"status": "skipped", "reason": "nonpositive_or_nonfinite_recording_scale",
+            entry.update({"status": "skip", "reason": "nonpositive_or_nonfinite_recording_scale",
                           "model_recommended_method": None, "used_method": None})
             logs.append(entry)
             continue
@@ -247,21 +275,28 @@ def _impute_values(frame: pd.DataFrame, value_col: str, config: Any) -> tuple[np
                                masked_recording=_runtime_recording(values, valid, timestamps_ms, calendar_timestamps))
         try:
             extracted = extract_basic_gap_features(runtime, scale_floor)
-            entry["gap_characteristics"] = {key: float(value) for key, value in extracted.items()}
             diagnostics = {key: float(value) for key, value in extracted.diagnostics.items()}
             if config.domain in {"weather", "traffic"}:
                 diagnostics.pop("sampling_rate_hz", None)
             entry["feature_diagnostics"] = diagnostics
         except (ValueError, TypeError) as error:
-            entry.update({"status": "skipped", "reason": f"feature_extraction_failed: {error}",
+            entry.update({"status": "skip", "reason": f"feature_extraction_failed: {error}",
                           "model_recommended_method": None, "used_method": None})
             logs.append(entry)
             continue
+        selector_features = _selector_features(extracted, artifact, domain_policy)
+        entry["gap_characteristics"] = {
+            column: float(selector_features[column]) for column in artifact["feature_columns"]
+        }
         selected_method, scores = _predict_method(
-            artifact, _selector_features(extracted, artifact, domain_policy),
+            artifact, selector_features,
         )
-        methods_to_try = sorted(scores, key=scores.__getitem__)
-        entry.update({"selection_mode": "random_forest", "predicted_method_nrmse": scores})
+        methods_to_try = _rank_candidates(scores, list(model_provenance["methods"]))
+        entry.update({
+            "selection_mode": "random_forest",
+            "predicted_method_nrmse": scores,
+            "candidate_ranking": methods_to_try,
+        })
         if in_validated_range is False:
             entry["selection_warning"] = "imputed_outside_validated_gap_duration_range_by_explicit_configuration"
         entry["model_recommended_method"] = selected_method
@@ -272,8 +307,7 @@ def _impute_values(frame: pd.DataFrame, value_col: str, config: Any) -> tuple[np
             except Exception as error:
                 entry["attempted_methods"].append({
                     "method": method,
-                    "applicable": None,
-                    "outcome": "exception",
+                    "applicable": False,
                     "reason": f"{type(error).__name__}: {error}",
                 })
                 continue
@@ -281,7 +315,6 @@ def _impute_values(frame: pd.DataFrame, value_col: str, config: Any) -> tuple[np
                 entry["attempted_methods"].append({
                     "method": method,
                     "applicable": False,
-                    "outcome": "not_applicable",
                     "reason": result.failure_reason,
                 })
                 continue
@@ -290,42 +323,38 @@ def _impute_values(frame: pd.DataFrame, value_col: str, config: Any) -> tuple[np
             except (TypeError, ValueError) as error:
                 entry["attempted_methods"].append({
                     "method": method,
-                    "applicable": True,
-                    "outcome": "invalid_prediction",
+                    "applicable": False,
                     "reason": f"non_numeric_predictions: {type(error).__name__}: {error}",
                 })
                 continue
             if predictions.ndim != 1 or len(predictions) != end - start:
                 entry["attempted_methods"].append({
                     "method": method,
-                    "applicable": True,
-                    "outcome": "invalid_prediction",
+                    "applicable": False,
                     "reason": "prediction_length_or_shape_mismatch",
                 })
                 continue
             if not np.isfinite(predictions).all():
                 entry["attempted_methods"].append({
                     "method": method,
-                    "applicable": True,
-                    "outcome": "invalid_prediction",
+                    "applicable": False,
                     "reason": "non_finite_predictions",
                 })
                 continue
             entry["attempted_methods"].append({
                 "method": method,
                 "applicable": True,
-                "outcome": "applied",
                 "reason": None,
             })
             values[start:end] = predictions
-            status = "filled" if method == selected_method else "fallback"
+            status = "success" if method == selected_method else "fallback"
             entry.update({"used_method": method, "status": status})
             _add_method_metadata(entry, result.metadata)
             if method != selected_method:
                 entry["fallback_reason"] = "higher-ranked RF method did not yield an applicable finite reconstruction"
             break
         else:
-            entry.update({"used_method": None, "status": "skipped", "reason": "no_candidate_method_applied"})
+            entry.update({"used_method": None, "status": "skip", "reason": "no_candidate_method_applied"})
         logs.append(entry)
     return values, logs, model_provenance
 
@@ -341,10 +370,16 @@ def run(frame: pd.DataFrame, value_col: str, *, config: Any, input_path: str | P
         _write_frame(result, output_path)
     finished = datetime.now().astimezone()
     details: dict[str, Any] = {
-        "imputation_model": model_provenance["artifact"], "gap_count": len(gaps), "gaps": gaps,
+        "imputation_model": model_provenance["artifact"],
+        # One selector is loaded for the complete activity; this ordered list
+        # is therefore the candidate portfolio for every decision in ``gaps``.
+        "candidate_portfolio": list(model_provenance["methods"]),
+        "selector_feature_specification": _selector_feature_specification(),
+        "gap_count": len(gaps),
+        "gaps": gaps,
         "validated_gap_duration_range_ms": list(DOMAIN_MODELS[config.domain]["validated_gap_duration_range_ms"]),
-        "filled_gap_count": sum(gap.get("status") in {"filled", "fallback"} for gap in gaps),
-        "skipped_gap_count": sum(gap.get("status") == "skipped" for gap in gaps),
+        "filled_gap_count": sum(gap.get("status") in {"success", "fallback"} for gap in gaps),
+        "skipped_gap_count": sum(gap.get("status") == "skip" for gap in gaps),
         "input_file": file_metadata(input_path),
         "file_after_missing_value_imputation": file_metadata(output_path),
     }
