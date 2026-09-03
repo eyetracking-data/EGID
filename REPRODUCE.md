@@ -14,11 +14,18 @@ workflow. Keep it in an external, user-controlled directory.
 Use the Python version recorded in [runtime.txt](runtime.txt), then create a
 clean environment and verify the installation:
 
+On macOS, install the tested interpreter with Homebrew first if
+`python3.12 --version` is unavailable:
+
 ```bash
-git clone <repository-url> gap-imputation-benchmark
+brew install python@3.12
+```
+
+```bash
+git clone https://github.com/eyetracking-data/EGID.git gap-imputation-benchmark
 cd gap-imputation-benchmark
 
-python -m venv .venv
+python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -r requirements.lock.txt
@@ -26,8 +33,9 @@ python -m pip install -e . --no-deps
 python -m pytest
 ```
 
-The tests do not require raw data or release artifacts. They should pass before
-starting a data-dependent workflow.
+The tests do not require raw data or release artifacts and do not download
+anything from the network. They should pass before starting a data-dependent
+workflow.
 
 Final deployment selectors are GitHub Release assets rather than tracked
 binaries. They are not needed to rebuild a benchmark or rerun the nested
@@ -52,7 +60,13 @@ Read the relevant data guide before running a workflow:
 Create a local `.env` file from `.env.example` and set paths only for the
 domain you will run. The real `.env` file is ignored by Git. Output locations
 for a full reproduction must be new directories outside the versioned
-reference outputs.
+reference outputs. Each data-directory variable must name the directory that
+contains `raw/` (or `processed/`/`interim/` where applicable), rather than that
+subdirectory itself.
+
+```bash
+cp .env.example .env
+```
 
 ```dotenv
 # Eye Tracking: a directory containing raw/

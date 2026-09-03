@@ -18,7 +18,8 @@ $BENCHMARK_DATA_DIR/
 
 1. Download the four source datasets and arrange them below one external data
    root using the layout above.
-2. Set `BENCHMARK_DATA_DIR` to that external root in `.env`.
+2. Set `BENCHMARK_DATA_DIR` to that external root in `.env`—the directory
+   containing `raw/`, not `raw/` itself.
 3. Set `EYE_TRACKING_BENCHMARK_DIR` to a new, non-existent output directory
    when the published `benchmarks/eyetracking/` directory should not be
    replaced.

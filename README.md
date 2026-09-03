@@ -63,8 +63,15 @@ The tested interpreter version is recorded in [runtime.txt](runtime.txt).
 Create an isolated environment, install the pinned dependencies, then install
 the package itself:
 
+On macOS, install the tested interpreter with Homebrew first if
+`python3.12 --version` is unavailable:
+
 ```bash
-python -m venv .venv
+brew install python@3.12
+```
+
+```bash
+python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -r requirements.lock.txt
@@ -74,7 +81,8 @@ python -m pytest
 
 The tests cover deterministic sampling, leakage controls, feature extraction,
 method applicability, artifact compatibility, and the three domain workflows.
-They do not download external data or selector binaries.
+They do not require external raw data or selector binaries and do not download
+anything from the network.
 
 ## Selector artifacts
 
@@ -89,8 +97,10 @@ python scripts/download_artifact.py --all
 To download one selector, use `--domain eye_tracking`, `--domain weather`, or
 `--domain traffic`. The command checks the asset size, SHA-256 digest, and
 artifact compatibility before placing it at
-`artifacts/<domain>/selector.joblib`. The release mapping, expected checksums,
-and destinations are in [artifacts/manifest.json](artifacts/manifest.json).
+its configured destination (for example,
+`artifacts/eyetracking/selector.joblib` for `--domain eye_tracking`). The
+release mapping, expected checksums, and destinations are in
+[artifacts/manifest.json](artifacts/manifest.json).
 Use `--force` only when intentionally replacing an existing local binary.
 
 ## External data and local configuration
@@ -109,6 +119,9 @@ The matching data guide specifies the required layout, source terms, and
 citations: [Eye Tracking](data/eye_tracking.md), [Weather](data/weather.md),
 and [Traffic](data/traffic.md). The full reproduction guide documents the
 optional output-directory variables as well.
+
+Each data-directory variable must name the directory that contains its `raw/`
+subdirectory, not the `raw/` directory itself.
 
 For shell commands that should use a local `.env` file, load it explicitly:
 
