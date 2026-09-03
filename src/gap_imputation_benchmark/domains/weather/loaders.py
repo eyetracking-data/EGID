@@ -32,7 +32,13 @@ def prepare_dwd_temperature_data(data_dir: Path, *, start: str, end: str) -> Pat
     for path in data_paths:
         raw = pd.read_csv(path, sep=";", na_values=["NaN", -999, "-999"], skipinitialspace=True)
         raw.columns = raw.columns.str.strip()
-        raw["MESS_DATUM"] = pd.to_datetime(raw["MESS_DATUM"], errors="coerce")
+        # DWD stores timestamps as YYYYMMDDHH integers.  Parsing integers directly
+        # makes pandas treat them as nanoseconds since the Unix epoch.
+        raw["MESS_DATUM"] = pd.to_datetime(
+            raw["MESS_DATUM"].astype(str).str.strip(),
+            format="%Y%m%d%H",
+            errors="coerce",
+        )
         raw.loc[raw["MESS_DATUM"].between(start, end)].to_csv(
             processed_dir / path.name, sep=";", index=False, na_rep="NaN"
         )
