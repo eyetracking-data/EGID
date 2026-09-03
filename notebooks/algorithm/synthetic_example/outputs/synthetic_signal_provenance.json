@@ -1,0 +1,269 @@
+{
+  "run": {
+    "run_id": "run-20260901T104312+0200-1f0759af",
+    "started_at": "2026-09-01T10:43:12.195034+02:00",
+    "finished_at": "2026-09-01T10:43:13.279852+02:00",
+    "duration_seconds": 1.084818,
+    "pipeline_implementation": {
+      "path": "src/gap_imputation_benchmark/algorithm/rf_domain_imputation.py",
+      "sha256": "72841338c8567f5bc09db435ec74d966baaa27fecd4bdd98b83aa4daacdcfb25"
+    },
+    "execution_notebook": {
+      "path": "notebooks/algorithm/01_example_pipeline_call.ipynb",
+      "format": "ipynb",
+      "size_bytes": 4468,
+      "modified_at": "2026-09-01T10:42:40.760766+02:00",
+      "sha256": "2a17ef62faf79b5a5749b08e23b8533b841bcd910ceb918487dbca7ecc988efd"
+    },
+    "configuration_file": {
+      "path": "notebooks/algorithm/outputs/synthetic_signal_provenance_logs/run-20260901T104312+0200-1f0759af/configuration.txt",
+      "format": "txt",
+      "size_bytes": 326,
+      "modified_at": "2026-09-01T10:43:12.196239+02:00",
+      "sha256": "5f98792622485b8ae0690ee8e76d8427366b2629d4092d04598291caa90f5457"
+    },
+    "comment": "Test"
+  },
+  "agents": {
+    "executor": {
+      "name": "Oliver",
+      "information_file": {
+        "path": "data/person_info_examples/executor_example.json",
+        "format": "json",
+        "size_bytes": 371,
+        "modified_at": "2026-09-01T10:18:38.754045+02:00",
+        "sha256": "4bf060fe7d15895da92804467c63bc245bc86ac44e472ac4f9082e45b4ddc5cd"
+      }
+    },
+    "responsible_person": {
+      "name": "Jenny",
+      "information_file": {
+        "path": "data/person_info_examples/executor_responsible_person_example.json",
+        "format": "json",
+        "size_bytes": 384,
+        "modified_at": "2026-09-01T10:18:38.807975+02:00",
+        "sha256": "27465ccf6b9ad23548aa859cb8239791df744014cc85ed00c7be13f4ff959eb8"
+      }
+    }
+  },
+  "configuration": {
+    "domain": "eye_tracking",
+    "sampling_rate_hz": 1000.0,
+    "timestamp_col": null,
+    "timestamp_unit": "ms",
+    "validity_col": null,
+    "outlier_method": "zscore",
+    "outlier_threshold": 2.1,
+    "standardization_method": "zscore",
+    "impute_outside_validated_gap_range": false
+  },
+  "activities": {
+    "outlier_detection": {
+      "metadata_file": {
+        "path": "notebooks/algorithm/outputs/synthetic_signal_provenance_logs/run-20260901T104312+0200-1f0759af/outlier_metadata.json",
+        "format": "json",
+        "size_bytes": 999,
+        "modified_at": "2026-09-01T10:43:12.200193+02:00",
+        "sha256": "a88bce4189b495f8240c150f8c07a1246f0cd13535a3a41e13721677bb8e8b8d"
+      },
+      "implementation": {
+        "path": "src/gap_imputation_benchmark/algorithm/outlier.py",
+        "sha256": "c988dc96fec1eb3431f4dce4505400b9566f7f72d3899f12e7bd9401661b2b32"
+      },
+      "timing": {
+        "started_at": "2026-09-01T10:43:12.196765+02:00",
+        "finished_at": "2026-09-01T10:43:12.198876+02:00",
+        "duration_seconds": 0.002111
+      },
+      "details": {
+        "method": "zscore",
+        "threshold": 2.1,
+        "outlier_regions": [],
+        "mean": 0.18996188799966413,
+        "std": 0.661177485061191,
+        "outlier_count": 0,
+        "outlier_region_count": 0,
+        "input_file": {
+          "path": null,
+          "format": null,
+          "size_bytes": null,
+          "modified_at": null
+        },
+        "file_after_outlier_detection": {
+          "path": "notebooks/algorithm/outputs/synthetic_signal_imputed_after_outlier_detection.csv",
+          "format": "csv",
+          "size_bytes": 5821,
+          "modified_at": "2026-09-01T10:43:12.198852+02:00",
+          "sha256": "1778b8ade8b6ecf732b40cdb96d46f4440ee8c5215b2bed200b5c3c25abad49c"
+        }
+      }
+    },
+    "missing_value_imputation": {
+      "metadata_file": {
+        "path": "notebooks/algorithm/outputs/synthetic_signal_provenance_logs/run-20260901T104312+0200-1f0759af/missing_value_metadata.json",
+        "format": "json",
+        "size_bytes": 4501,
+        "modified_at": "2026-09-01T10:43:13.277111+02:00",
+        "sha256": "4b80ffcb0661ec30650e682cda84ae5c07c4a926f4328eb933e24d8a44ecb8ae"
+      },
+      "implementation": {
+        "path": "src/gap_imputation_benchmark/algorithm/missing_values.py",
+        "sha256": "d35c9465ca669e1214647da8f4e3745e8ce921f1b2da21742a533006cfaf8cb0"
+      },
+      "timing": {
+        "started_at": "2026-09-01T10:43:12.200225+02:00",
+        "finished_at": "2026-09-01T10:43:13.274529+02:00",
+        "duration_seconds": 1.074304
+      },
+      "details": {
+        "imputation_model": {
+          "path": "artifacts/eyetracking/selector.joblib",
+          "format": "joblib",
+          "size_bytes": 5807894,
+          "modified_at": "2026-09-01T10:28:18.746549+02:00",
+          "sha256": "4f01926e969f7efcec905bed31bf39cf608d70cd9702326e3f229ed75b3d2239"
+        },
+        "gap_count": 1,
+        "gaps": [
+          {
+            "gap_number": 1,
+            "gap_start_idx_inclusive": 150,
+            "gap_end_idx_exclusive": 152,
+            "gap_length_samples": 2,
+            "realized_gap_duration_ms": 2.0,
+            "within_validated_gap_duration_range": true,
+            "gap_characteristics": {
+              "realized_gap_duration_ms": 2.0,
+              "left_context_valid_fraction": 1.0,
+              "right_context_valid_fraction": 1.0,
+              "normalized_boundary_jump": 0.8573711818606292,
+              "normalized_mean_difference_right_minus_left": 1.1426288181393678,
+              "local_std_over_scale": 0.5895494655462371,
+              "local_range_over_scale": 1.4278864544181065,
+              "normalized_trend_before": 227.79674344270774,
+              "normalized_trend_after": 342.71852911476554,
+              "normalized_trend_difference": 114.9217856720578,
+              "trend_before_r2": 1.0,
+              "trend_after_r2": 1.0,
+              "normalized_median_absolute_velocity_left": 227.79674344271177,
+              "normalized_median_absolute_velocity_right": 342.718529114765,
+              "normalized_p90_absolute_velocity_left": 227.79674344271177,
+              "normalized_p90_absolute_velocity_right": 342.718529114765
+            },
+            "feature_diagnostics": {
+              "local_iqr": 0.0369141449996383,
+              "local_std": 0.021762714455633058,
+              "local_range": 0.052709207621409404,
+              "left_mean": -0.9677379562489061,
+              "right_mean": -0.9255587903753442,
+              "boundary_difference": 0.03164912412571452,
+              "absolute_boundary_difference": 0.03164912412571452,
+              "mean_difference_right_minus_left": 0.04217916587356196,
+              "n_valid_left": 2.0,
+              "n_valid_right": 2.0,
+              "gap_length_samples": 2.0,
+              "sampling_rate_hz": 1000.0,
+              "trend_before": 8.408922017889518,
+              "trend_after": 12.651161477805214,
+              "median_absolute_velocity_left": 8.408922017889667,
+              "median_absolute_velocity_right": 12.651161477805195,
+              "p90_absolute_velocity_left": 8.408922017889667,
+              "p90_absolute_velocity_right": 12.651161477805195
+            },
+            "selection_mode": "random_forest",
+            "predicted_method_nrmse": {
+              "forward_fill": 0.0835156279859251,
+              "nearest_boundary": 0.06012063343366387,
+              "linear": 0.021279763924707325,
+              "pchip": 0.016821904131031247,
+              "local_natural_cubic_spline": 0.015855446153832237,
+              "polyfit_bic": 0.022651475030366502,
+              "template": 0.023262862056541177
+            },
+            "model_recommended_method": "local_natural_cubic_spline",
+            "attempted_methods": [
+              {
+                "method": "local_natural_cubic_spline",
+                "applicable": true,
+                "reason": null
+              }
+            ],
+            "used_method": "local_natural_cubic_spline",
+            "status": "filled",
+            "left_support_point_count": 2,
+            "right_support_point_count": 2,
+            "support_point_count": 4,
+            "spline_boundary_condition": "natural"
+          }
+        ],
+        "validated_gap_duration_range_ms": [
+          1.0,
+          250.0
+        ],
+        "filled_gap_count": 1,
+        "skipped_gap_count": 0,
+        "input_file": {
+          "path": "notebooks/algorithm/outputs/synthetic_signal_imputed_after_outlier_detection.csv",
+          "format": "csv",
+          "size_bytes": 5821,
+          "modified_at": "2026-09-01T10:43:12.198852+02:00",
+          "sha256": "1778b8ade8b6ecf732b40cdb96d46f4440ee8c5215b2bed200b5c3c25abad49c"
+        },
+        "file_after_missing_value_imputation": {
+          "path": "notebooks/algorithm/outputs/synthetic_signal_imputed_after_missing_value_imputation.csv",
+          "format": "csv",
+          "size_bytes": 5855,
+          "modified_at": "2026-09-01T10:43:13.274437+02:00",
+          "sha256": "c953342a861fec0527d7ce016772950ec240b136f06225e07aa163c861647c15"
+        }
+      }
+    },
+    "standardization": {
+      "metadata_file": {
+        "path": "notebooks/algorithm/outputs/synthetic_signal_provenance_logs/run-20260901T104312+0200-1f0759af/standardization_metadata.json",
+        "format": "json",
+        "size_bytes": 1164,
+        "modified_at": "2026-09-01T10:43:13.279833+02:00",
+        "sha256": "ea48ce45e8b5706096ed7bd43b34efc11f5a66c6ff3a8ccd1363609dce8f35ff"
+      },
+      "implementation": {
+        "path": "src/gap_imputation_benchmark/algorithm/standardization.py",
+        "sha256": "605f65844babe00b211646e105d74d4cdbef60725402c5cf331ad987428aaf3d"
+      },
+      "timing": {
+        "started_at": "2026-09-01T10:43:13.277156+02:00",
+        "finished_at": "2026-09-01T10:43:13.278408+02:00",
+        "duration_seconds": 0.001252
+      },
+      "details": {
+        "method": "zscore",
+        "status": "applied",
+        "finite_value_count": 300,
+        "parameters": {
+          "mean": 0.18236970269583128,
+          "std": 0.6654547555574319
+        },
+        "input_file": {
+          "path": "notebooks/algorithm/outputs/synthetic_signal_imputed_after_missing_value_imputation.csv",
+          "format": "csv",
+          "size_bytes": 5855,
+          "modified_at": "2026-09-01T10:43:13.274437+02:00",
+          "sha256": "c953342a861fec0527d7ce016772950ec240b136f06225e07aa163c861647c15"
+        },
+        "file_after_standardization": {
+          "path": "notebooks/algorithm/outputs/synthetic_signal_imputed.csv",
+          "format": "csv",
+          "size_bytes": 5850,
+          "modified_at": "2026-09-01T10:43:13.278378+02:00",
+          "sha256": "c55c4b832261c5359d1b59098b15e7dc0e1b44d078fbb939911da100e73287fb"
+        }
+      }
+    }
+  },
+  "summary": {
+    "gaps_before_outlier_detection": 1,
+    "gaps_after_outlier_detection": 1,
+    "filled_gap_count": 1,
+    "skipped_gap_count": 0
+  }
+}

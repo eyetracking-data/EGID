@@ -156,7 +156,7 @@ Use the self-contained synthetic example at
 `notebooks/algorithm/synthetic_example/01_example_pipeline_call.ipynb` or the
 complete input, configuration, and provenance guide in
 [docs/algorithm_usage.md](docs/algorithm_usage.md). Generated algorithm-example
-outputs are deliberately ignored by Git.
+outputs are committed as reference results; additional local runs remain ignored by Git.
 
 ## Licence and attribution
 

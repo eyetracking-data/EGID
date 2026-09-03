@@ -267,18 +267,65 @@ def _impute_values(frame: pd.DataFrame, value_col: str, config: Any) -> tuple[np
         entry["model_recommended_method"] = selected_method
         entry["attempted_methods"] = []
         for method in methods_to_try:
-            result = _apply_method(method, runtime, domain_policy)
-            entry["attempted_methods"].append({"method": method, "applicable": result.method_applicable,
-                                                "reason": result.failure_reason})
-            if result.method_applicable and len(result.predictions) == end - start:
-                values[start:end] = result.predictions
-                entry.update({"used_method": method, "status": "filled"})
-                _add_method_metadata(entry, result.metadata)
-                if method != selected_method:
-                    entry["fallback_reason"] = "higher-ranked RF method was not applicable"
-                break
+            try:
+                result = _apply_method(method, runtime, domain_policy)
+            except Exception as error:
+                entry["attempted_methods"].append({
+                    "method": method,
+                    "applicable": None,
+                    "outcome": "exception",
+                    "reason": f"{type(error).__name__}: {error}",
+                })
+                continue
+            if not result.method_applicable:
+                entry["attempted_methods"].append({
+                    "method": method,
+                    "applicable": False,
+                    "outcome": "not_applicable",
+                    "reason": result.failure_reason,
+                })
+                continue
+            try:
+                predictions = np.asarray(result.predictions, dtype=float)
+            except (TypeError, ValueError) as error:
+                entry["attempted_methods"].append({
+                    "method": method,
+                    "applicable": True,
+                    "outcome": "invalid_prediction",
+                    "reason": f"non_numeric_predictions: {type(error).__name__}: {error}",
+                })
+                continue
+            if predictions.ndim != 1 or len(predictions) != end - start:
+                entry["attempted_methods"].append({
+                    "method": method,
+                    "applicable": True,
+                    "outcome": "invalid_prediction",
+                    "reason": "prediction_length_or_shape_mismatch",
+                })
+                continue
+            if not np.isfinite(predictions).all():
+                entry["attempted_methods"].append({
+                    "method": method,
+                    "applicable": True,
+                    "outcome": "invalid_prediction",
+                    "reason": "non_finite_predictions",
+                })
+                continue
+            entry["attempted_methods"].append({
+                "method": method,
+                "applicable": True,
+                "outcome": "applied",
+                "reason": None,
+            })
+            values[start:end] = predictions
+            status = "filled" if method == selected_method else "fallback"
+            entry.update({"used_method": method, "status": status})
+            _add_method_metadata(entry, result.metadata)
+            if method != selected_method:
+                entry["fallback_reason"] = "higher-ranked RF method did not yield an applicable finite reconstruction"
+            break
         else:
-            entry.update({"used_method": None, "status": "skipped", "reason": "no_candidate_method_applicable"})
+            entry.update({"used_method": None, "status": "skipped", "reason": "no_candidate_method_applied"})
         logs.append(entry)
     return values, logs, model_provenance
 
@@ -296,7 +343,7 @@ def run(frame: pd.DataFrame, value_col: str, *, config: Any, input_path: str | P
     details: dict[str, Any] = {
         "imputation_model": model_provenance["artifact"], "gap_count": len(gaps), "gaps": gaps,
         "validated_gap_duration_range_ms": list(DOMAIN_MODELS[config.domain]["validated_gap_duration_range_ms"]),
-        "filled_gap_count": sum(gap.get("status") == "filled" for gap in gaps),
+        "filled_gap_count": sum(gap.get("status") in {"filled", "fallback"} for gap in gaps),
         "skipped_gap_count": sum(gap.get("status") == "skipped" for gap in gaps),
         "input_file": file_metadata(input_path),
         "file_after_missing_value_imputation": file_metadata(output_path),

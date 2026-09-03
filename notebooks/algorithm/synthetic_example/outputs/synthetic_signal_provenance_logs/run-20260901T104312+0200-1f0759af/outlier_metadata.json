@@ -1,0 +1,33 @@
+{
+  "implementation": {
+    "path": "src/gap_imputation_benchmark/algorithm/outlier.py",
+    "sha256": "c988dc96fec1eb3431f4dce4505400b9566f7f72d3899f12e7bd9401661b2b32"
+  },
+  "timing": {
+    "started_at": "2026-09-01T10:43:12.196765+02:00",
+    "finished_at": "2026-09-01T10:43:12.198876+02:00",
+    "duration_seconds": 0.002111
+  },
+  "details": {
+    "method": "zscore",
+    "threshold": 2.1,
+    "outlier_regions": [],
+    "mean": 0.18996188799966413,
+    "std": 0.661177485061191,
+    "outlier_count": 0,
+    "outlier_region_count": 0,
+    "input_file": {
+      "path": null,
+      "format": null,
+      "size_bytes": null,
+      "modified_at": null
+    },
+    "file_after_outlier_detection": {
+      "path": "notebooks/algorithm/outputs/synthetic_signal_imputed_after_outlier_detection.csv",
+      "format": "csv",
+      "size_bytes": 5821,
+      "modified_at": "2026-09-01T10:43:12.198852+02:00",
+      "sha256": "1778b8ade8b6ecf732b40cdb96d46f4440ee8c5215b2bed200b5c3c25abad49c"
+    }
+  }
+}

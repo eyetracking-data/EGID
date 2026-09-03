@@ -1,0 +1,12 @@
+# General preprocessing pipeline configuration
+{
+  "domain": "eye_tracking",
+  "sampling_rate_hz": 1000.0,
+  "timestamp_col": null,
+  "timestamp_unit": "ms",
+  "validity_col": null,
+  "outlier_method": "zscore",
+  "outlier_threshold": 2.1,
+  "standardization_method": "zscore",
+  "impute_outside_validated_gap_range": false
+}

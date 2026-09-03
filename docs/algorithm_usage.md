@@ -17,7 +17,7 @@ configuration and scope of a released artifact.
 
 ## Start with the example notebook
 
-Open and run [notebooks/algorithm/synthetic_example/01_example_pipeline_call.ipynb](../notebooks/algorithm/synthetic_example/01_example_pipeline_call.ipynb) from within the repository. It is a self-contained example with a synthetic signal and writes its outputs below `notebooks/algorithm/synthetic_example/outputs/`. Domain-specific examples are available in the `eyetracking/`, `weather/`, and `traffic/` subdirectories.
+Open and run [notebooks/algorithm/synthetic_example/01_example_pipeline_call.ipynb](../notebooks/algorithm/synthetic_example/01_example_pipeline_call.ipynb) from within the repository. It is a self-contained example with a synthetic signal and writes its outputs below `notebooks/algorithm/synthetic_example/outputs/`. The complete output directory is committed as a reference result. Domain-specific examples are available in the `eyetracking/`, `weather/`, and `traffic/` subdirectories.
 
 For a real dataset, replace the synthetic `frame`, `VALUE_COLUMN`, output paths, and `DomainImputationConfig` in that notebook. The notebook is the recommended starting point because it makes the configuration and provenance fields explicit.
 
@@ -275,6 +275,8 @@ For Eye Tracking with no timestamp column, use `DOMAIN = "eye_tracking"`, set `T
 
 For every contiguous missing segment, the algorithm checks that sufficient valid context is available on both sides and that its duration lies inside the domain's validated range. It then extracts the observable gap features, predicts the nRMSE of each candidate method with the domain selector, and attempts the predicted best method first. If that method is inapplicable, it tries the remaining methods in increasing predicted-error order. Segments that cannot safely be handled remain missing and receive a documented reason.
 
+Missing segments are processed in temporal order. After a segment has been filled successfully, its reconstructed values are available as observable context for later segments in the same run. This reflects an operational preprocessing run and means that successive decisions can propagate earlier reconstruction errors. In contrast, the benchmark evaluates artificial gaps independently on their original masked recordings; its reported error estimates do not measure this sequential error propagation.
+
 The common candidate set is forward fill, nearest boundary, linear interpolation, PCHIP, local natural cubic spline, BIC-selected polynomial fitting, and template imputation. Weather and Traffic additionally expose their domain-specific `seasonal_periodic` candidate. The selector predicts a method-specific error for each registered candidate; it does not directly produce the imputed values.
 
 Typical non-filled outcomes are insufficient context at a series edge, less than 80% valid context, a gap outside the validated duration range, failure to extract features, non-positive recording scale, or no applicable candidate method. A fallback from the top-ranked method is not an error: the report records the selected method, the attempted methods, and the method ultimately used.
@@ -317,7 +319,7 @@ The top-level provenance JSON has four sections:
 | `activities` | Separate records for outlier detection, missing-value imputation, and standardization. |
 | `summary` | Counts of gaps before outlier processing, after outlier processing, filled gaps, and skipped gaps. |
 
-The `activities.missing_value_imputation.details.gaps` list is the per-gap audit trail. For each gap, inspect `status`, `reason` when skipped, `within_validated_gap_duration_range`, `model_recommended_method`, `predicted_method_nrmse`, `attempted_methods`, `used_method`, and any method-specific diagnostics. This list is the authoritative report of what the algorithm did to every gap.
+The `activities.missing_value_imputation.details.gaps` list is the per-gap audit trail. Its `status` is `filled` when the primary recommendation was applied, `fallback` when a lower-ranked candidate was applied, or `skipped` when no imputation was performed. Each `attempted_methods` item records `outcome` as `applied`, `not_applicable`, `invalid_prediction`, or `exception`; `reason` is `null` only for `applied`. For each gap, inspect `reason` when skipped, `fallback_reason` when applicable, `within_validated_gap_duration_range`, `model_recommended_method`, `predicted_method_nrmse`, `attempted_methods`, `used_method`, and any method-specific diagnostics. This list is the authoritative report of what the algorithm did to every gap.
 
 The following notebook cell prints a compact completion report after a run:
 

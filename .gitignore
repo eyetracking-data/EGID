@@ -31,6 +31,9 @@ data/*
 scratch/
 tmp/
 notebooks/algorithm/*/outputs/
+!notebooks/algorithm/synthetic_example/
+!notebooks/algorithm/synthetic_example/outputs/
+!notebooks/algorithm/synthetic_example/outputs/**
 
 # macOS Finder metadata is local to each machine.
 .DS_Store
