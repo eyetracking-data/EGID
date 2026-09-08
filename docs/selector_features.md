@@ -38,7 +38,7 @@ Feature extraction is split into two layers:
 
 Conceptually, the processing path is
 
-```math
+$$
 
 \text{domain time series}
 
@@ -58,7 +58,7 @@ Conceptually, the processing path is
 
 \text{Random Forest selector}.
 
-```
+$$
 
 The domain-specific selector input formats are:
 
@@ -74,7 +74,7 @@ The corresponding implementation references are consolidated in [Section 7](#7-i
 
 This distinction is important when comparing domains: the **feature semantics**
 
-and extraction logic are shared**, while the physically meaningful
+and extraction logic are **shared**, while the physically meaningful
 
 representation of gap duration is adapted to the domain. The duration column
 
@@ -91,27 +91,27 @@ rejects an incompatible feature order before inference.
 
 Let
 
-```math
+$$
 
 g_i=[s_i,e_i)
 
-```
+$$
 
 denote a contiguous missing interval with start index $s_i$, exclusive end index $e_i$, and length
 
-```math
+$$
 
 n_i=e_i-s_i.
 
-```
+$$
 
 The requested context length on each side is
 
-```math
+$$
 
 n_{\mathrm{context},i}=\max(n_i,2).
 
-```
+$$
 
 For the observable context of gap $g_i$, let
 
@@ -133,7 +133,7 @@ For the observable context of gap $g_i$, let
 
 The feature-normalization scale is
 
-```math
+$$
 
 \sigma_i^{\mathrm{feature}}
 
@@ -147,7 +147,7 @@ s_{\mathrm{floor}}
 
 \right).
 
-```
+$$
 
 In the evaluation described in the paper, $s_{\mathrm{floor}}$ is estimated **exclusively from the corresponding training partition** as the first percentile of positive context-IQR values and is then kept fixed for the held-out dataset, station, or district.
 
@@ -218,7 +218,7 @@ For temporal features, each context side must contain at least two valid and fin
 
 The two boundary observations are
 
-```math
+$$
 
 b_i^{L}=x_{s_i-1},
 
@@ -226,21 +226,21 @@ b_i^{L}=x_{s_i-1},
 
 b_i^{R}=x_{e_i},
 
-```
+$$
 
 because the missing interval is represented as
 
-```math
+$$
 
 g_i=[s_i,e_i).
 
-```
+$$
 
 Both boundary observations must be valid and finite.
 
 The normalized boundary jump is
 
-```math
+$$
 
 x_{i,\mathrm{boundary}}
 
@@ -256,7 +256,7 @@ x_{i,\mathrm{boundary}}
 
 }.
 
-```
+$$
 
 This corresponds to `normalized_boundary_jump`.
 
@@ -268,7 +268,7 @@ Let $n_{i,L}^{\mathrm{requested}}$ and $n_{i,R}^{\mathrm{requested}}$ denote the
 
 The completeness features are
 
-```math
+$$
 
 x_{i,\mathrm{valid},L}
 
@@ -284,11 +284,11 @@ n_{i,L}^{\mathrm{requested}}
 
 },
 
-```
+$$
 
 and
 
-```math
+$$
 
 x_{i,\mathrm{valid},R}
 
@@ -304,7 +304,7 @@ n_{i,R}^{\mathrm{requested}}
 
 }.
 
-```
+$$
 
 They are stored as `left_context_valid_fraction` and `right_context_valid_fraction`.
 
@@ -314,7 +314,7 @@ They are stored as `left_context_valid_fraction` and `right_context_valid_fracti
 
 The valid context means are
 
-```math
+$$
 
 \mu_i^{L}
 
@@ -334,11 +334,11 @@ The valid context means are
 
 \sum_{x\in R_i}x.
 
-```
+$$
 
 Their normalized signed difference is
 
-```math
+$$
 
 x_{i,\mathrm{mean}}
 
@@ -354,7 +354,7 @@ x_{i,\mathrm{mean}}
 
 }.
 
-```
+$$
 
 The sign is retained. Positive values indicate a higher local level after the gap; negative values indicate a lower local level.
 
@@ -366,15 +366,15 @@ This corresponds to `normalized_mean_difference_right_minus_left`.
 
 The combined observable context is
 
-```math
+$$
 
 C_i=L_i\cup R_i.
 
-```
+$$
 
 Its interquartile range is
 
-```math
+$$
 
 \mathrm{IQR}(C_i)
 
@@ -382,11 +382,11 @@ Its interquartile range is
 
 Q_{0.75}(C_i)-Q_{0.25}(C_i).
 
-```
+$$
 
 The scale used by all amplitude-dependent features is
 
-```math
+$$
 
 \sigma_i^{\mathrm{feature}}
 
@@ -400,13 +400,13 @@ s_{\mathrm{floor}}
 
 \right).
 
-```
+$$
 
 This feature scale is distinct from the nRMSE normalization scale defined in [methods.md](methods.md#4-error-metric-and-oracle).
 
 The local standard-deviation feature is
 
-```math
+$$
 
 x_{i,\mathrm{std}}
 
@@ -422,13 +422,13 @@ x_{i,\mathrm{std}}
 
 }.
 
-```
+$$
 
 The implementation uses NumPy's population standard deviation, i.e. `np.std(...)` with the default `ddof=0`.
 
 The local-range feature is
 
-```math
+$$
 
 x_{i,\mathrm{range}}
 
@@ -444,7 +444,7 @@ x_{i,\mathrm{range}}
 
 }.
 
-```
+$$
 
 These correspond to `local_std_over_scale` and `local_range_over_scale`.
 
@@ -456,7 +456,7 @@ Trend features are calculated separately for the valid left and right context ob
 
 The implementation converts timestamps from milliseconds to seconds:
 
-```math
+$$
 
 t_k^{(\mathrm{s})}
 
@@ -472,11 +472,11 @@ t_k^{(\mathrm{ms})}
 
 }.
 
-```
+$$
 
 Within each side, observations are ordered by timestamp. An ordinary least-squares linear model with intercept is fitted to centered timestamps:
 
-```math
+$$
 
 x_k
 
@@ -492,11 +492,11 @@ x_k
 
 \varepsilon_k.
 
-```
+$$
 
 This yields the left and right slopes
 
-```math
+$$
 
 \beta_i^{L}
 
@@ -504,11 +504,11 @@ This yields the left and right slopes
 
 \beta_i^{R}.
 
-```
+$$
 
 The three normalized trend features are
 
-```math
+$$
 
 x_{i,\mathrm{trend},L}
 
@@ -524,9 +524,9 @@ x_{i,\mathrm{trend},L}
 
 },
 
-```
+$$
 
-```math
+$$
 
 x_{i,\mathrm{trend},R}
 
@@ -542,11 +542,11 @@ x_{i,\mathrm{trend},R}
 
 },
 
-```
+$$
 
 and
 
-```math
+$$
 
 x_{i,\mathrm{trend},\Delta}
 
@@ -562,7 +562,7 @@ x_{i,\mathrm{trend},\Delta}
 
 }.
 
-```
+$$
 
 These correspond to:
 
@@ -580,7 +580,7 @@ Because the fit uses time in seconds, the unnormalized slopes have units of sign
 
 For each context side, the coefficient of determination is computed as
 
-```math
+$$
 
 R^2
 
@@ -598,11 +598,11 @@ R^2
 
 }.
 
-```
+$$
 
 The two selector features are
 
-```math
+$$
 
 R_{i,L}^{2}
 
@@ -610,7 +610,7 @@ R_{i,L}^{2}
 
 R_{i,R}^{2},
 
-```
+$$
 
 stored as `trend_before_r2` and `trend_after_r2`.
 
@@ -628,7 +628,7 @@ The $R^2$ features are not amplitude-normalized.
 
 For consecutive valid observations within one context side, the implementation calculates absolute velocity as
 
-```math
+$$
 
 v_k
 
@@ -648,11 +648,11 @@ t_{k+1}-t_k
 
 \right\rvert.
 
-```
+$$
 
 Let
 
-```math
+$$
 
 V_i^{L}
 
@@ -666,13 +666,13 @@ k\text{ indexes consecutive valid observations in }L_i
 
 \right\},
 
-```
+$$
 
 and analogously define $V_i^{R}$ for the right context.
 
 For each side, the median and 90th percentile are calculated:
 
-```math
+$$
 
 \widetilde{v}_i^{L}
 
@@ -688,11 +688,11 @@ For each side, the median and 90th percentile are calculated:
 
 \mathrm{median}(V_i^{R}),
 
-```
+$$
 
 and
 
-```math
+$$
 
 v_{i,0.90}^{L}
 
@@ -708,11 +708,11 @@ v_{i,0.90}^{R}
 
 Q_{0.90}(V_i^{R}).
 
-```
+$$
 
 The four normalized selector features are
 
-```math
+$$
 
 x_{i,\mathrm{velmed},L}
 
@@ -728,9 +728,9 @@ x_{i,\mathrm{velmed},L}
 
 },
 
-```
+$$
 
-```math
+$$
 
 x_{i,\mathrm{velmed},R}
 
@@ -746,9 +746,9 @@ x_{i,\mathrm{velmed},R}
 
 },
 
-```
+$$
 
-```math
+$$
 
 x_{i,\mathrm{vel90},L}
 
@@ -764,11 +764,11 @@ v_{i,0.90}^{L}
 
 },
 
-```
+$$
 
 and
 
-```math
+$$
 
 x_{i,\mathrm{vel90},R}
 
@@ -784,7 +784,7 @@ v_{i,0.90}^{R}
 
 }.
 
-```
+$$
 
 These correspond to:
 
@@ -802,35 +802,9 @@ Because timestamps are converted to seconds, the unnormalized velocity values ha
 
 ## 4. Leakage-Safe Feature Extraction
 
-The feature implementation is designed so that selector inputs contain only information that would be available for a real missing interval.
+Selector inputs use only information observable for a real missing interval: gap geometry, the masked recording, valid finite context and boundary observations, their timestamps, and the supplied feature-scale floor.
 
-Feature extraction uses:
-
-- gap geometry,
-
-- the masked recording,
-
-- valid and finite observations in the predefined left and right contexts,
-
-- valid and finite immediate gap boundaries,
-
-- timestamps of observable context samples,
-
-- and the supplied feature-scale floor.
-
-It deliberately does **not** use:
-
-- hidden values inside an artificially masked interval,
-
-- reconstruction errors,
-
-- oracle-best method labels,
-
-- selector targets,
-
-- or dataset/group identifiers.
-
-Artificially masked benchmark gaps retain their original values only as ground truth for evaluating candidate reconstruction quality; those values are not used to construct the selector features.
+They never use concealed gap values, reconstruction errors, oracle labels, selector targets, or dataset/group identifiers. Concealed values of artificial gaps are retained solely to evaluate reconstruction quality.
 
 ---
 
@@ -860,37 +834,11 @@ The implementation also retains diagnostic quantities such as local IQR, local s
 
 ## 6. Relationship to Random Forest Training and Runtime Selection
 
-For domain $d$, the selector receives
+The domain-specific Random Forest uses the 16 selector features to predict the expected nRMSE of each available imputation method for a gap. It selects the method with the lowest predicted nRMSE.
 
-```math
+During training, the model learns this relationship from artificially masked gaps, for which the actual reconstruction errors of all applicable methods are known. At runtime, it uses only observable gap context; it does not predict missing signal values directly.
 
-\mathbf{x}_i^{(d)}
-
-\in
-
-\mathbb{R}^{16},
-
-```
-
-where the first component is the domain-specific duration representation $d_i^{(d)}$ and the other 15 components follow the shared definitions above.
-
-During training, this vector is paired with the method-specific normalized reconstruction errors obtained by applying all applicable candidate methods to the same artificially masked interval.
-
-The domain-specific native multi-output Random Forest predicts one expected nRMSE value per candidate method:
-
-```math
-
-f_d\!\left(\mathbf{x}_i^{(d)}\right)
-
-=
-
-\widehat{\mathbf{e}}_i.
-
-```
-
-The selector therefore predicts **candidate reconstruction quality from observable gap context** rather than predicting missing signal values directly.
-
-At runtime, the same feature input format used during training must be reproduced before inference. In particular, the canonical millisecond duration is converted to the unit expected by the fitted domain-specific selector before its feature vector is evaluated.
+The duration feature is converted from the canonical millisecond representation to the unit expected by the domain-specific selector before inference.
 
 ---
 
