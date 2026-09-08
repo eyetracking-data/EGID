@@ -132,16 +132,9 @@ The candidate registry defines the seven shared reconstruction methods and exten
 
 ## 4. Error metric and oracle
 
-For artificial gap $i$ and method $m$, reconstruction quality is measured
-as normalized root mean squared error:
+For artificial gap $i$ and method $m$, reconstruction quality is measured as normalized root mean squared error (nRMSE): the RMSE divided by $\sigma_i$. Here, $\sigma_i$ is the larger of the local-context IQR and 5% of the IQR of valid observations outside the artificial gap.
 
-$\operatorname{nRMSE}_{i,m} = \frac{\operatorname{RMSE}_{i,m}}{\sigma_i}, \qquad \sigma_i = \max\left(\operatorname{IQR}(C_i), 0.05\operatorname{IQR}(O_i)\right),$
-
-where $C_i$ is the union of valid left and right context observations and
-$O_i$ contains valid observations in the recording outside the artificial
-gap. The second term avoids an unstable denominator when the local context is
-nearly constant. Gaps with a non-finite or non-positive normalization scale are
-excluded from method-score learning and evaluation.
+The local context is $C_i$, the union of valid left and right context observations; $O_i$ contains valid observations in the recording outside the artificial gap. The outside-gap IQR term avoids an unstable denominator when the local context is nearly constant. Gaps with a non-finite or non-positive normalization scale are excluded from method-score learning and evaluation.
 
 The offline oracle selects the candidate with the lowest observed nRMSE for a
 gap. It uses retained ground truth and is not deployable. It is reported only
