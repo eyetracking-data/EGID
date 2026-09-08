@@ -32,11 +32,12 @@ Install the project as described in [REPRODUCE.md](../REPRODUCE.md). Before runn
 | `traffic` | `artifacts/traffic/selector.joblib` |
 
 The algorithm reads these paths automatically; no absolute artifact path is
-configured. If the required artifact is absent or incompatible with the domain,
-the run stops with an error rather than selecting a method silently. Retrieve a
-published artifact explicitly with `python scripts/download_artifact.py --all`
-from the repository root; the library never downloads a model during import or
-pipeline execution.
+configured. If the required artifact is absent, the run stops with an error.
+Use only the published artifact corresponding to the selected domain; its
+metadata records the expected feature and method contract. Retrieve a published
+artifact explicitly with `python scripts/download_artifact.py --all` from the
+repository root; the library never downloads a model during import or pipeline
+execution.
 
 ## Input table
 

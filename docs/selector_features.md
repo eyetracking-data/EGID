@@ -56,9 +56,13 @@ and extraction logic are **shared**, while the physically meaningful
 
 representation of gap duration is adapted to the domain. The duration column
 
-name must therefore match the selector artifact exactly; artifact loading
+name must therefore match the selector artifact exactly. At inference, the
 
-rejects an incompatible feature order before inference.
+runtime constructs the feature frame in the ordered feature-column contract
+
+stored in the selector artifact. The released domain-specific artifacts record
+
+their feature contracts in metadata.
 
 ---
 

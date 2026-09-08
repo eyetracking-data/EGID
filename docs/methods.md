@@ -67,7 +67,7 @@ the benchmark outputs as exclusions rather than silently discarded.
 
 ## 3. Candidate reconstruction methods
 
-Seven reconstruction methods are shared by all domains. Each method operates only on the masked recording and the predefined local context of the respective gap. A method is considered applicable only if its required observations are available and valid; otherwise, it returns an explicit non-applicable outcome rather than silently falling back to another reconstruction method.
+Seven reconstruction methods are shared by all domains. Each of these seven shared methods operates only on the masked recording and the predefined local context of the respective gap. A method is considered applicable only if its required observations are available and valid; otherwise, it returns an explicit non-applicable outcome rather than silently falling back to another reconstruction method.
 
 | Method                         | Reconstruction principle                                                                                                                                                                                                                                                                                   |
 | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -86,6 +86,13 @@ First, a **linear baseline** is constructed between the valid observations immed
 $b_i = x_{\mathrm{left}} + \frac{i}{L+1} \left( x_{\mathrm{right}}-x_{\mathrm{left}} \right), \qquad i=1,\ldots,L.$
 
 This baseline represents the large-scale transition between the observed values immediately before and after the gap.
+
+The implementation searches the predefined left and right context windows
+independently. On each side, it uses the first fully observed finite segment
+of length $L$ encountered when scanning outward from the gap. When valid
+segments are available on both sides, they are aggregated pointwise by their
+arithmetic mean; when only one is available, that segment is used alone. The
+method is not applicable if neither side provides a valid segment.
 
 
 Second, the template is **detrended**. To express the relative position within the template, define $\tau_i = \dfrac{i-1}{L-1}$ for $L>1$; for $L=1$, set $\tau_i=0$.
@@ -142,8 +149,7 @@ mean differences, local variation, linear trends and fit quality, and absolute
 velocity summaries. Amplitude-dependent features are normalized with a
 fold-local scale floor learned as the first percentile of positive context-IQR
 values in the corresponding training partition. No additional z-score feature
-standardization is applied before Random Forest fitting. Undefined values are
-median-imputed using statistics estimated on the training partition only.
+standardization is applied before Random Forest fitting.
 
 The exact definitions, units, and domain-specific duration conversion are in
 [selector_features.md](selector_features.md). Eye Tracking uses gap duration
@@ -233,7 +239,7 @@ Three comparison levels are retained:
 
 | Level | Definition | Deployment status |
 | --- | --- | --- |
-| Best fixed method | One candidate chosen by its domain-wide mean nRMSE. | Deployable baseline. |
+| Fixed-method reference | Candidate with the lowest mean nRMSE across the complete evaluated benchmark output. | Post-hoc descriptive reference; not a leakage-safe deployment baseline. |
 | Adaptive selector | Lowest predicted nRMSE from the leakage-safe outer-fold selector. | Deployable policy. |
 | Offline oracle | Lowest observed nRMSE using hidden target values. | Not deployable. |
 
