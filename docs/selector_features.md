@@ -8,7 +8,7 @@ The shared feature implementation is:
 
 The feature extractor operates on a **masked recording** and predefined context windows surrounding a gap. It does **not** access hidden ground-truth values inside the masked interval, candidate reconstruction errors, oracle labels, or dataset/group identifiers.
 
-This document describes the selector input contract.
+This document describes the selector input format.
 
 For the benchmark protocol and grouped evaluation, see
 
@@ -16,7 +16,7 @@ For the benchmark protocol and grouped evaluation, see
 
 [algorithm_usage.md](algorithm_usage.md). The strict feature lists stored in
 
-benchmark, evaluation, and artifact `metadata.json` files record the contract
+benchmark, evaluation, and artifact `metadata.json` files record the input format
 
 used for each committed run.
 
@@ -24,7 +24,7 @@ used for each committed run.
 
 ---
 
-## 1. Shared Feature Extraction and Domain-Specific Selector Contracts
+## 1. Shared Feature Extraction and Domain-Specific Selector Input Formats
 
 Feature extraction is split into two layers:
 
@@ -32,7 +32,7 @@ Feature extraction is split into two layers:
 
    `extract_basic_gap_features(...)` computes the common feature representation. At this stage, gap duration is represented as `realized_gap_duration_ms`.
 
-2. **Domain-specific selector contract**  
+2. **Domain-specific selector input format**
 
    Before training or inference, each domain exposes the duration feature in the physical unit used by its selector.
 
@@ -60,7 +60,7 @@ Conceptually, the processing path is
 
 ```
 
-The domain contracts are:
+The domain-specific selector input formats are:
 
 | Domain | Selector duration feature | Unit | Conversion from canonical milliseconds |
 |---|---|---:|---|
@@ -70,7 +70,7 @@ The domain contracts are:
 
 The remaining **15 features are shared without a domain-specific rename or unit conversion**.
 
-The corresponding implementation references are consolidated in [Section 9](#9-implementation-reference).
+The corresponding implementation references are consolidated in [Section 7](#7-implementation-reference).
 
 This distinction is important when comparing domains: the **feature semantics
 
@@ -84,7 +84,10 @@ rejects an incompatible feature order before inference.
 
 ---
 
-## 2. Notation
+<details>
+<summary><strong>Technical notation</strong> — optional definitions used by the exact formulas below.</summary>
+
+<br>
 
 Let
 
@@ -150,15 +153,11 @@ In the evaluation described in the paper, $s_{\mathrm{floor}}$ is estimated **ex
 
 No additional z-score standardization is applied before Random Forest fitting.
 
----
-
-## 3. Domain-Specific Gap-Duration Feature
-
-Feature 1 uses the domain-specific selector representation defined in the Section 1 contract table. The shared extractor stores the canonical duration in milliseconds and converts only this feature before selector training or inference; the context windows and other 15 feature calculations remain unchanged.
+</details>
 
 ---
 
-## 4. The 16 Selector Features
+## 2. The 16 Selector Features at a Glance
 
 The notation $d_i^{(d)}$ below denotes the **domain-specific selector representation** of gap duration defined in Section 1.
 
@@ -189,13 +188,13 @@ The exact implementation names of feature 1 are:
 | Weather | `realized_gap_duration_hours` |
 | Traffic | `realized_gap_duration_minutes` |
 
-The other 15 implementation names are identical across all three domain-specific selector contracts.
+The other 15 implementation names are identical across all three domain-specific selector input formats.
 
 ---
 
-## 5. Exact Calculation Details
+## 3. Exact Calculation Details
 
-### 5.1 Observable context
+### 3.1 Observable context
 
 Only samples that are both **marked valid** and **finite** are used in the feature calculations.
 
@@ -211,9 +210,11 @@ These names form an **internal benchmark interface** and should not be interpret
 
 The paper's evaluated configurations require at least 80% of the requested context to be valid and finite on each side of the gap.
 
+For temporal features, each context side must contain at least two valid and finite observations. Their timestamps must be finite and unique; after chronological ordering, they must be strictly increasing. Otherwise, feature extraction rejects the gap.
+
 ---
 
-### 5.2 Gap boundaries
+### 3.2 Gap boundaries
 
 The two boundary observations are
 
@@ -261,7 +262,7 @@ This corresponds to `normalized_boundary_jump`.
 
 ---
 
-### 5.3 Context completeness
+### 3.3 Context completeness
 
 Let $n_{i,L}^{\mathrm{requested}}$ and $n_{i,R}^{\mathrm{requested}}$ denote the requested numbers of samples in the left and right context windows, and let $n_{i,L}^{\mathrm{valid}}$ and $n_{i,R}^{\mathrm{valid}}$ denote the corresponding numbers of valid and finite samples.
 
@@ -309,7 +310,7 @@ They are stored as `left_context_valid_fraction` and `right_context_valid_fracti
 
 ---
 
-### 5.4 Context means
+### 3.4 Context means
 
 The valid context means are
 
@@ -361,7 +362,7 @@ This corresponds to `normalized_mean_difference_right_minus_left`.
 
 ---
 
-### 5.5 Local variability and normalization scale
+### 3.5 Local variability and normalization scale
 
 The combined observable context is
 
@@ -449,7 +450,7 @@ These correspond to `local_std_over_scale` and `local_range_over_scale`.
 
 ---
 
-### 5.6 Local linear structure
+### 3.6 Local linear structure
 
 Trend features are calculated separately for the valid left and right context observations.
 
@@ -575,7 +576,7 @@ Because the fit uses time in seconds, the unnormalized slopes have units of sign
 
 ---
 
-### 5.7 Trend coefficient of determination
+### 3.7 Trend coefficient of determination
 
 For each context side, the coefficient of determination is computed as
 
@@ -623,7 +624,7 @@ The $R^2$ features are not amplitude-normalized.
 
 ---
 
-### 5.8 Absolute velocity
+### 3.8 Absolute velocity
 
 For consecutive valid observations within one context side, the implementation calculates absolute velocity as
 
@@ -799,7 +800,7 @@ Because timestamps are converted to seconds, the unnormalized velocity values ha
 
 ---
 
-## 6. Leakage-Safe Feature Extraction
+## 4. Leakage-Safe Feature Extraction
 
 The feature implementation is designed so that selector inputs contain only information that would be available for a real missing interval.
 
@@ -833,7 +834,7 @@ Artificially masked benchmark gaps retain their original values only as ground t
 
 ---
 
-## 7. Raw Numerators Retained for Fold-Specific Normalization
+## 5. Raw Numerators Retained for Fold-Specific Normalization
 
 `selector_feature_values(...)` additionally stores the raw numerators underlying the amplitude-normalized features.
 
@@ -857,7 +858,7 @@ The implementation also retains diagnostic quantities such as local IQR, local s
 
 ---
 
-## 8. Relationship to Random Forest Training and Runtime Selection
+## 6. Relationship to Random Forest Training and Runtime Selection
 
 For domain $d$, the selector receives
 
@@ -889,11 +890,11 @@ f_d\!\left(\mathbf{x}_i^{(d)}\right)
 
 The selector therefore predicts **candidate reconstruction quality from observable gap context** rather than predicting missing signal values directly.
 
-At runtime, the same feature contract used during training must be reproduced before inference. In particular, the canonical millisecond duration is converted to the unit expected by the fitted domain-specific selector before its feature vector is evaluated.
+At runtime, the same feature input format used during training must be reproduced before inference. In particular, the canonical millisecond duration is converted to the unit expected by the fitted domain-specific selector before its feature vector is evaluated.
 
 ---
 
-## 9. Implementation Reference
+## 7. Implementation Reference
 
 ### Shared feature extraction
 
@@ -907,7 +908,7 @@ At runtime, the same feature contract used during training must be reproduced be
 
   - `RAW_FEATURE_NUMERATOR_COLUMNS`
 
-### Domain-specific feature contracts
+### Domain-specific selector input formats
 
 - [`src/gap_imputation_benchmark/domains/eyetracking/adapter.py`](../src/gap_imputation_benchmark/domains/eyetracking/adapter.py)
 
