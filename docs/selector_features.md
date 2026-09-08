@@ -316,7 +316,7 @@ $v_k = \left\lvert \frac{ x_{k+1}-x_k }{ t_{k+1}-t_k } \right\rvert.$
 
 Let
 
-$V_i^{L} = \left\{ v_k: k\text{ indexes consecutive valid observations in }L_i \right\},$
+$V_i^{L} = \{v_k : k\text{ indexes consecutive valid observations in }L_i\},$
 
 and analogously define $V_i^{R}$ for the right context.
 
