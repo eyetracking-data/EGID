@@ -30,13 +30,7 @@ uses only observable samples around the gap to choose a reconstruction method;
 it never uses hidden values, oracle labels, reconstruction errors, or dataset,
 participant, station, or district identifiers as model features.
 
-For a domain $d$, let $M_d$ be its portfolio of applicable candidate
-methods. Rather than directly predicting the missing signal values, a
-domain-specific native multi-output Random Forest predicts one expected
-normalized reconstruction error for each candidate method. The recommendation
-is the method with the smallest predicted error:
-
-$\hat m_i = \arg\min_{m \in M_d} \hat e_{i,m}.$
+Rather than directly predicting missing signal values, a domain-specific native multi-output Random Forest predicts the expected normalized reconstruction error for each candidate method and recommends the method with the lowest predicted error.
 
 At deployment, candidates are attempted in ascending predicted-error order.
 If the highest-ranked candidate is not applicable or cannot return the required
