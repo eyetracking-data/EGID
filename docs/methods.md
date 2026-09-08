@@ -36,9 +36,7 @@ domain-specific native multi-output Random Forest predicts one expected
 normalized reconstruction error for each candidate method. The recommendation
 is the method with the smallest predicted error:
 
-$$
-\hat m_i = \arg\min_{m \in M_d} \hat e_{i,m}.
-$$
+$\hat m_i = \arg\min_{m \in M_d} \hat e_{i,m}.$
 
 At deployment, candidates are attempted in ascending predicted-error order.
 If the highest-ranked candidate is not applicable or cannot return the required
@@ -91,80 +89,32 @@ Seven reconstruction methods are shared by all domains. Each method operates onl
 
 First, a **linear baseline** is constructed between the valid observations immediately before and after the gap. Let the two observed boundary values be denoted by $x_{\mathrm{left}}$ and $x_{\mathrm{right}}$. For the $i$-th missing sample, the linear baseline is defined as
 
-$$
-b_i
-=
-x_{\mathrm{left}}
-+
-\frac{i}{L+1}
-\left(
-x_{\mathrm{right}}-x_{\mathrm{left}}
-\right),
-\qquad i=1,\ldots,L.
-$$
+$b_i = x_{\mathrm{left}} + \frac{i}{L+1} \left( x_{\mathrm{right}}-x_{\mathrm{left}} \right), \qquad i=1,\ldots,L.$
 
 This baseline represents the large-scale transition between the observed values immediately before and after the gap.
 
 
-Second, the template is **detrended**. To express the relative position within the template, define
-
-$$
-\tau_i
-=
-\begin{cases}
-\dfrac{i-1}{L-1}, & L>1,\\[6pt]
-0, & L=1.
-\end{cases}
-$$
+Second, the template is **detrended**. To express the relative position within the template, define $\tau_i = \dfrac{i-1}{L-1}$ for $L>1$; for $L=1$, set $\tau_i=0$.
 
 The linear trend connecting the first and last template values is then
 
-$$
-\ell_i^{(q)}
-=
-q_1
-+
-\tau_i
-\left(
-q_L-q_1
-\right),
-$$
+$\ell_i^{(q)} = q_1 + \tau_i \left( q_L-q_1 \right),$
 
 and the residual template movement is
 
-$$
-r_i
-=
-q_i-\ell_i^{(q)}.
-$$
+$r_i = q_i-\ell_i^{(q)}.$
 
-Thus, \(r_i\) contains only the local variation of the neighboring template after removing its overall level change.
+Thus, $r_i$ contains only the local variation of the neighboring template after removing its overall level change.
 
 Finally, this residual movement is smoothly added to the linear baseline. The tapering weight is defined as
 
-$$
-w_i
-=
-\sin^2\!\left(
-\pi \tau_i
-\right),
-$$
+$w_i = \sin^2\!\left( \pi \tau_i \right),$
 
 giving the final reconstruction
 
-$$
-\boxed{
-\hat{x}_i
-=
-b_i
-+
-w_i r_i
-}
-\qquad
-i=1,\ldots,L.
-$$
+$\hat{x}_i = b_i + w_i r_i, \qquad i=1,\ldots,L.$
 
-The tapering weight approaches zero at both ends of the gap and is largest toward its center. Consequently, the reconstruction remains close to the boundary-constrained linear baseline near the gap edges, while the local variation obtained from the neighboring template primarily affects the interior of the missing interval. For \(L=1\), \(r_i=0\), so the method reduces naturally to the linear boundary baseline.
+The tapering weight approaches zero at both ends of the gap and is largest toward its center. Consequently, the reconstruction remains close to the boundary-constrained linear baseline near the gap edges, while the local variation obtained from the neighboring template primarily affects the interior of the missing interval. For $L=1$, $r_i=0$, so the method reduces naturally to the linear boundary baseline.
 
 
 ### Seasonal-periodic reconstruction
@@ -185,13 +135,7 @@ The candidate registry defines the seven shared reconstruction methods and exten
 For artificial gap $i$ and method $m$, reconstruction quality is measured
 as normalized root mean squared error:
 
-$$
-\operatorname{nRMSE}_{i,m} =
-\frac{\operatorname{RMSE}_{i,m}}{\sigma_i},
-\qquad
-\sigma_i = \max\left(\operatorname{IQR}(C_i),
-0.05\operatorname{IQR}(O_i)\right),
-$$
+$\operatorname{nRMSE}_{i,m} = \frac{\operatorname{RMSE}_{i,m}}{\sigma_i}, \qquad \sigma_i = \max\left(\operatorname{IQR}(C_i), 0.05\operatorname{IQR}(O_i)\right),$
 
 where $C_i$ is the union of valid left and right context observations and
 $O_i$ contains valid observations in the recording outside the artificial

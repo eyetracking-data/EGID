@@ -148,17 +148,7 @@ The other 15 implementation names are identical across all three domain-specific
 
 ### 3.1 Observable context
 
-Only samples that are both **marked valid** and **finite** are used in the feature calculations.
-
-The shared extractor operates on a canonical internal representation containing:
-
-- `gaze_x` — the numeric signal value used by the shared benchmark feature code,
-
-- `is_valid` — validity indicator,
-
-- `timestamp_ms` — timestamp represented in milliseconds.
-
-These names form an **internal benchmark interface** and should not be interpreted as restricting the shared feature definitions to eye-tracking data. Domain-specific loaders/workflows map weather and traffic data into the representation expected by the shared feature extractor.
+All feature calculations use only valid, finite observations from the predefined context windows, with timestamps in milliseconds for temporal features. Domain-specific loaders map their data to the shared extractor's internal representation.
 
 The paper's evaluated configurations require at least 80% of the requested context to be valid and finite on each side of the gap.
 
