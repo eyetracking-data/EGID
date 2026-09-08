@@ -72,7 +72,7 @@ The remaining **15 features are shared without a domain-specific rename or unit 
 
 The corresponding implementation references are consolidated in [Section 7](#7-implementation-reference).
 
-This distinction is important when comparing domains: the **feature semantics
+This distinction is important when comparing domains: the **feature semantics**
 
 and extraction logic are shared**, while the physically meaningful
 
