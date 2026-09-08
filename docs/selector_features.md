@@ -36,29 +36,7 @@ Feature extraction is split into two layers:
 
    Before training or inference, each domain exposes the duration feature in the physical unit used by its selector.
 
-Conceptually, the processing path is
-
-$$
-
-\text{domain time series}
-
-\longrightarrow
-
-\text{canonical gap representation}
-
-\longrightarrow
-
-\text{shared 16-feature extraction}
-
-\longrightarrow
-
-\text{domain-specific duration conversion}
-
-\longrightarrow
-
-\text{Random Forest selector}.
-
-$$
+Conceptually, the processing path is: domain time series → canonical gap representation → shared 16-feature extraction → domain-specific duration conversion → Random Forest selector.
 
 The domain-specific selector input formats are:
 
@@ -91,27 +69,15 @@ rejects an incompatible feature order before inference.
 
 Let
 
-$$
-
-g_i=[s_i,e_i)
-
-$$
+$g_i=[s_i,e_i)$
 
 denote a contiguous missing interval with start index $s_i$, exclusive end index $e_i$, and length
 
-$$
-
-n_i=e_i-s_i.
-
-$$
+$n_i=e_i-s_i.$
 
 The requested context length on each side is
 
-$$
-
-n_{\mathrm{context},i}=\max(n_i,2).
-
-$$
+$n_{\mathrm{context},i}=\max(n_i,2).$
 
 For the observable context of gap $g_i$, let
 
@@ -133,21 +99,7 @@ For the observable context of gap $g_i$, let
 
 The feature-normalization scale is
 
-$$
-
-\sigma_i^{\mathrm{feature}}
-
-=
-
-\max\left(
-
-\mathrm{IQR}(C_i),
-
-s_{\mathrm{floor}}
-
-\right).
-
-$$
+$\sigma_i^{\mathrm{feature}} = \max\left( \mathrm{IQR}(C_i), s_{\mathrm{floor}} \right).$
 
 In the evaluation described in the paper, $s_{\mathrm{floor}}$ is estimated **exclusively from the corresponding training partition** as the first percentile of positive context-IQR values and is then kept fixed for the held-out dataset, station, or district.
 
@@ -218,45 +170,17 @@ For temporal features, each context side must contain at least two valid and fin
 
 The two boundary observations are
 
-$$
-
-b_i^{L}=x_{s_i-1},
-
-\qquad
-
-b_i^{R}=x_{e_i},
-
-$$
+$b_i^{L}=x_{s_i-1}, \qquad b_i^{R}=x_{e_i},$
 
 because the missing interval is represented as
 
-$$
-
-g_i=[s_i,e_i).
-
-$$
+$g_i=[s_i,e_i).$
 
 Both boundary observations must be valid and finite.
 
 The normalized boundary jump is
 
-$$
-
-x_{i,\mathrm{boundary}}
-
-=
-
-\frac{
-
-\left\lvert b_i^{R}-b_i^{L}\right\rvert
-
-}{
-
-\sigma_i^{\mathrm{feature}}
-
-}.
-
-$$
+$x_{i,\mathrm{boundary}} = \frac{ \left\lvert b_i^{R}-b_i^{L}\right\rvert }{ \sigma_i^{\mathrm{feature}} }.$
 
 This corresponds to `normalized_boundary_jump`.
 
@@ -268,43 +192,11 @@ Let $n_{i,L}^{\mathrm{requested}}$ and $n_{i,R}^{\mathrm{requested}}$ denote the
 
 The completeness features are
 
-$$
-
-x_{i,\mathrm{valid},L}
-
-=
-
-\frac{
-
-n_{i,L}^{\mathrm{valid}}
-
-}{
-
-n_{i,L}^{\mathrm{requested}}
-
-},
-
-$$
+$x_{i,\mathrm{valid},L} = \frac{ n_{i,L}^{\mathrm{valid}} }{ n_{i,L}^{\mathrm{requested}} },$
 
 and
 
-$$
-
-x_{i,\mathrm{valid},R}
-
-=
-
-\frac{
-
-n_{i,R}^{\mathrm{valid}}
-
-}{
-
-n_{i,R}^{\mathrm{requested}}
-
-}.
-
-$$
+$x_{i,\mathrm{valid},R} = \frac{ n_{i,R}^{\mathrm{valid}} }{ n_{i,R}^{\mathrm{requested}} }.$
 
 They are stored as `left_context_valid_fraction` and `right_context_valid_fraction`.
 
@@ -314,47 +206,11 @@ They are stored as `left_context_valid_fraction` and `right_context_valid_fracti
 
 The valid context means are
 
-$$
-
-\mu_i^{L}
-
-=
-
-\frac{1}{\lvert L_i\rvert}
-
-\sum_{x\in L_i}x,
-
-\qquad
-
-\mu_i^{R}
-
-=
-
-\frac{1}{\lvert R_i\rvert}
-
-\sum_{x\in R_i}x.
-
-$$
+$\mu_i^{L} = \frac{1}{\lvert L_i\rvert} \sum_{x\in L_i}x, \qquad \mu_i^{R} = \frac{1}{\lvert R_i\rvert} \sum_{x\in R_i}x.$
 
 Their normalized signed difference is
 
-$$
-
-x_{i,\mathrm{mean}}
-
-=
-
-\frac{
-
-\mu_i^{R}-\mu_i^{L}
-
-}{
-
-\sigma_i^{\mathrm{feature}}
-
-}.
-
-$$
+$x_{i,\mathrm{mean}} = \frac{ \mu_i^{R}-\mu_i^{L} }{ \sigma_i^{\mathrm{feature}} }.$
 
 The sign is retained. Positive values indicate a higher local level after the gap; negative values indicate a lower local level.
 
@@ -366,85 +222,27 @@ This corresponds to `normalized_mean_difference_right_minus_left`.
 
 The combined observable context is
 
-$$
-
-C_i=L_i\cup R_i.
-
-$$
+$C_i=L_i\cup R_i.$
 
 Its interquartile range is
 
-$$
-
-\mathrm{IQR}(C_i)
-
-=
-
-Q_{0.75}(C_i)-Q_{0.25}(C_i).
-
-$$
+$\mathrm{IQR}(C_i) = Q_{0.75}(C_i)-Q_{0.25}(C_i).$
 
 The scale used by all amplitude-dependent features is
 
-$$
-
-\sigma_i^{\mathrm{feature}}
-
-=
-
-\max\left(
-
-\mathrm{IQR}(C_i),
-
-s_{\mathrm{floor}}
-
-\right).
-
-$$
+$\sigma_i^{\mathrm{feature}} = \max\left( \mathrm{IQR}(C_i), s_{\mathrm{floor}} \right).$
 
 This feature scale is distinct from the nRMSE normalization scale defined in [methods.md](methods.md#4-error-metric-and-oracle).
 
 The local standard-deviation feature is
 
-$$
-
-x_{i,\mathrm{std}}
-
-=
-
-\frac{
-
-\mathrm{std}(C_i)
-
-}{
-
-\sigma_i^{\mathrm{feature}}
-
-}.
-
-$$
+$x_{i,\mathrm{std}} = \frac{ \mathrm{std}(C_i) }{ \sigma_i^{\mathrm{feature}} }.$
 
 The implementation uses NumPy's population standard deviation, i.e. `np.std(...)` with the default `ddof=0`.
 
 The local-range feature is
 
-$$
-
-x_{i,\mathrm{range}}
-
-=
-
-\frac{
-
-\max(C_i)-\min(C_i)
-
-}{
-
-\sigma_i^{\mathrm{feature}}
-
-}.
-
-$$
+$x_{i,\mathrm{range}} = \frac{ \max(C_i)-\min(C_i) }{ \sigma_i^{\mathrm{feature}} }.$
 
 These correspond to `local_std_over_scale` and `local_range_over_scale`.
 
@@ -456,113 +254,25 @@ Trend features are calculated separately for the valid left and right context ob
 
 The implementation converts timestamps from milliseconds to seconds:
 
-$$
-
-t_k^{(\mathrm{s})}
-
-=
-
-\frac{
-
-t_k^{(\mathrm{ms})}
-
-}{
-
-1000
-
-}.
-
-$$
+$t_k^{(\mathrm{s})} = \frac{ t_k^{(\mathrm{ms})} }{ 1000 }.$
 
 Within each side, observations are ordered by timestamp. An ordinary least-squares linear model with intercept is fitted to centered timestamps:
 
-$$
-
-x_k
-
-=
-
-\alpha
-
-+
-
-\beta\left(t_k-\bar{t}\right)
-
-+
-
-\varepsilon_k.
-
-$$
+$x_k = \alpha + \beta\left(t_k-\bar{t}\right) + \varepsilon_k.$
 
 This yields the left and right slopes
 
-$$
-
-\beta_i^{L}
-
-\qquad\text{and}\qquad
-
-\beta_i^{R}.
-
-$$
+$\beta_i^{L} \qquad\text{and}\qquad \beta_i^{R}.$
 
 The three normalized trend features are
 
-$$
+$x_{i,\mathrm{trend},L} = \frac{ \beta_i^{L} }{ \sigma_i^{\mathrm{feature}} },$
 
-x_{i,\mathrm{trend},L}
-
-=
-
-\frac{
-
-\beta_i^{L}
-
-}{
-
-\sigma_i^{\mathrm{feature}}
-
-},
-
-$$
-
-$$
-
-x_{i,\mathrm{trend},R}
-
-=
-
-\frac{
-
-\beta_i^{R}
-
-}{
-
-\sigma_i^{\mathrm{feature}}
-
-},
-
-$$
+$x_{i,\mathrm{trend},R} = \frac{ \beta_i^{R} }{ \sigma_i^{\mathrm{feature}} },$
 
 and
 
-$$
-
-x_{i,\mathrm{trend},\Delta}
-
-=
-
-\frac{
-
-\beta_i^{R}-\beta_i^{L}
-
-}{
-
-\sigma_i^{\mathrm{feature}}
-
-}.
-
-$$
+$x_{i,\mathrm{trend},\Delta} = \frac{ \beta_i^{R}-\beta_i^{L} }{ \sigma_i^{\mathrm{feature}} }.$
 
 These correspond to:
 
@@ -580,37 +290,11 @@ Because the fit uses time in seconds, the unnormalized slopes have units of sign
 
 For each context side, the coefficient of determination is computed as
 
-$$
-
-R^2
-
-=
-
-1-
-
-\frac{
-
-\sum_k\left(x_k-\hat{x}_k\right)^2
-
-}{
-
-\sum_k\left(x_k-\bar{x}\right)^2
-
-}.
-
-$$
+$R^2 = 1- \frac{ \sum_k\left(x_k-\hat{x}_k\right)^2 }{ \sum_k\left(x_k-\bar{x}\right)^2 }.$
 
 The two selector features are
 
-$$
-
-R_{i,L}^{2}
-
-\qquad\text{and}\qquad
-
-R_{i,R}^{2},
-
-$$
+$R_{i,L}^{2} \qquad\text{and}\qquad R_{i,R}^{2},$
 
 stored as `trend_before_r2` and `trend_after_r2`.
 
@@ -628,163 +312,33 @@ The $R^2$ features are not amplitude-normalized.
 
 For consecutive valid observations within one context side, the implementation calculates absolute velocity as
 
-$$
-
-v_k
-
-=
-
-\left\lvert
-
-\frac{
-
-x_{k+1}-x_k
-
-}{
-
-t_{k+1}-t_k
-
-}
-
-\right\rvert.
-
-$$
+$v_k = \left\lvert \frac{ x_{k+1}-x_k }{ t_{k+1}-t_k } \right\rvert.$
 
 Let
 
-$$
-
-V_i^{L}
-
-=
-
-\left\{
-
-v_k:
-
-k\text{ indexes consecutive valid observations in }L_i
-
-\right\},
-
-$$
+$V_i^{L} = \left\{ v_k: k\text{ indexes consecutive valid observations in }L_i \right\},$
 
 and analogously define $V_i^{R}$ for the right context.
 
 For each side, the median and 90th percentile are calculated:
 
-$$
-
-\widetilde{v}_i^{L}
-
-=
-
-\mathrm{median}(V_i^{L}),
-
-\qquad
-
-\widetilde{v}_i^{R}
-
-=
-
-\mathrm{median}(V_i^{R}),
-
-$$
+$\widetilde{v}_i^{L} = \mathrm{median}(V_i^{L}), \qquad \widetilde{v}_i^{R} = \mathrm{median}(V_i^{R}),$
 
 and
 
-$$
-
-v_{i,0.90}^{L}
-
-=
-
-Q_{0.90}(V_i^{L}),
-
-\qquad
-
-v_{i,0.90}^{R}
-
-=
-
-Q_{0.90}(V_i^{R}).
-
-$$
+$v_{i,0.90}^{L} = Q_{0.90}(V_i^{L}), \qquad v_{i,0.90}^{R} = Q_{0.90}(V_i^{R}).$
 
 The four normalized selector features are
 
-$$
+$x_{i,\mathrm{velmed},L} = \frac{ \widetilde{v}_i^{L} }{ \sigma_i^{\mathrm{feature}} },$
 
-x_{i,\mathrm{velmed},L}
+$x_{i,\mathrm{velmed},R} = \frac{ \widetilde{v}_i^{R} }{ \sigma_i^{\mathrm{feature}} },$
 
-=
-
-\frac{
-
-\widetilde{v}_i^{L}
-
-}{
-
-\sigma_i^{\mathrm{feature}}
-
-},
-
-$$
-
-$$
-
-x_{i,\mathrm{velmed},R}
-
-=
-
-\frac{
-
-\widetilde{v}_i^{R}
-
-}{
-
-\sigma_i^{\mathrm{feature}}
-
-},
-
-$$
-
-$$
-
-x_{i,\mathrm{vel90},L}
-
-=
-
-\frac{
-
-v_{i,0.90}^{L}
-
-}{
-
-\sigma_i^{\mathrm{feature}}
-
-},
-
-$$
+$x_{i,\mathrm{vel90},L} = \frac{ v_{i,0.90}^{L} }{ \sigma_i^{\mathrm{feature}} },$
 
 and
 
-$$
-
-x_{i,\mathrm{vel90},R}
-
-=
-
-\frac{
-
-v_{i,0.90}^{R}
-
-}{
-
-\sigma_i^{\mathrm{feature}}
-
-}.
-
-$$
+$x_{i,\mathrm{vel90},R} = \frac{ v_{i,0.90}^{R} }{ \sigma_i^{\mathrm{feature}} }.$
 
 These correspond to:
 
