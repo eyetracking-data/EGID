@@ -1,12 +1,12 @@
-# Gap Imputation Benchmark
+# Context-Aware and Traceable Missing Value Imputation for Time-Series
 
-This repository contains the reproducible implementation and published derived
-outputs for a benchmark of gap-imputation methods and a gap-specific method
-selector. It evaluates three separate domains—Eye Tracking, Weather, and Traffic—using a shared benchmark architecture and one domain-specific selector per domain.
+This repository provides the reproducible implementation of context-aware and traceable missing-value imputation for time-series data. It includes benchmarks and domain-specific method selectors for Eye Tracking, Weather, and Traffic, a pipeline for applying the selectors to real missing segments, and a provenance framework that links workflow-level lineage with gap-specific context, recommendations, execution attempts, applied methods, and outcomes.
 
+## Gap Imputation Benchmark
+
+The Gap Imputation Benchmark evaluates Eye Tracking, Weather, and Traffic using a shared architecture and one domain-specific selector per domain. For each artificial gap, the selector predicts the normalized errors of established reconstruction methods from observable context features and ranks the candidates for gap-specific imputation.
 
 The repository contains no raw study data. Raw inputs stay in user-controlled external directories; only code, configuration, documentation, derived benchmark tables, evaluation outputs, and artifact metadata are included in the repository.
-
 
 The complete benchmark protocol, including artificial-gap sampling, candidate
 methods, normalization, and grouped evaluation, is specified in
@@ -16,7 +16,7 @@ defined in [docs/selector_features.md](docs/selector_features.md), and
 source data. The provenance-aware preprocessing pipeline for real missing
 segments is documented in [docs/algorithm_usage.md](docs/algorithm_usage.md).
 
-## Scope and interpretation
+### Scope and Interpretation
 
 The benchmark compares method-specific normalized reconstruction errors on
 artificial gaps drawn only from originally observed samples. A domain-specific
@@ -31,7 +31,7 @@ eligible gaps in their domain; they are deployment artifacts, not an additional
 unbiased performance estimate. See [docs/methods.md](docs/methods.md) for the
 complete protocol and limitations.
 
-## Repository layout
+### Repository Layout
 
 ```text
 src/gap_imputation_benchmark/  Installable package
@@ -57,7 +57,7 @@ The required files and their purposes are defined in
 implemented in
 [`src/gap_imputation_benchmark/benchmark/output_contract.py`](src/gap_imputation_benchmark/benchmark/output_contract.py).
 
-## Installation and verification
+### Installation and Verification
 
 The tested interpreter version is recorded in [runtime.txt](runtime.txt).
 Create an isolated environment, install the pinned dependencies, then install
@@ -84,7 +84,7 @@ method applicability, artifact compatibility, and the three domain workflows.
 They do not require external raw data or selector binaries and do not download
 anything from the network.
 
-## Selector artifacts
+### Selector Artifacts
 
 Selector binaries are intentionally distributed as GitHub Release assets rather
 than committed to Git. Downloading is always explicit; importing the library or
@@ -103,7 +103,7 @@ release mapping, expected checksums, and destinations are in
 [artifacts/manifest.json](artifacts/manifest.json).
 Use `--force` only when intentionally replacing an existing local binary.
 
-## External data and local configuration
+### External Data and Local Configuration
 
 Raw inputs must remain outside the clone. Configure only the domain you intend
 to run, either as environment variables or in a local `.env` file (ignored by
@@ -135,7 +135,7 @@ Never point a new full reproduction at the versioned `benchmarks/`,
 `results/`, or `artifacts/` directories. Use fresh output directories so the
 published reference outputs remain unchanged.
 
-## Reproduction workflows
+### Reproduction Workflows
 
 The canonical notebook sequence and command-line instructions are in
 [REPRODUCE.md](REPRODUCE.md). The main implementations are also exposed through
@@ -145,7 +145,7 @@ frozen paper-workflow settings are [Eye Tracking](configs/eye_tracking_final.tom
 [Traffic](configs/traffic_final.toml). Their loaders reject missing and unknown
 keys so protocol changes remain explicit.
 
-## Using the preprocessing algorithm
+### Using the Preprocessing Algorithm
 
 `gap_imputation_benchmark.algorithm` implements a three-stage, provenance-aware
 pipeline: optional outlier detection, selector-based missing-value imputation,
@@ -158,9 +158,42 @@ complete input, configuration, and provenance guide in
 [docs/algorithm_usage.md](docs/algorithm_usage.md). Generated algorithm-example
 outputs are committed as reference results; additional local runs remain ignored by Git.
 
-## Licence and attribution
+## Provenance-Aware Preprocessing
+
+Provenance-aware preprocessing documents each adaptive decision, including its observable context, recommendation, execution attempts, applied method, and outcome. ProvCards combine this gap-indexed metadata with workflow-level lineage and can be grouped into ProvDecks, transformed into ProvGraphs, serialized as PROV-JSON, or stored in the Neo4j-based Artifact Database.
+
+ProvCards can be stored in and extracted from a neo4j database using the methods in ```artifact_db.py```.
+The ```prov_manager.py``` file offers methods to convert between ProvCards, ProvDecks and ProvJSON.
+To generate a ProvGraph use ```visualizer.py```.
+
+### Requirements
+
+Install requirements using ```pip install -r requirements.txt```.
+
+### Artifact Database
+
+To use the artifact database create a .env file containing
+
+````
+NEO4J_URI=neo4j://127.0.0.1:7687
+NEO4J_USER=neo4j
+NEO4J_PASSWORD=provenance
+````
+
+and run ``docker compose up -d``. If you want to change the password you have to change it in the docker compose file as well.
+
+Usage of the artifact database as well as the conversions between ProvCards, ProvDecks and ProvJSON are shown in the time_series_prov_extractor.py and preprocess_weather_data.ipynb example scripts.
+
+## Licence and Attribution
 
 The source code is licensed under the [MIT License](LICENSE). Derived tables,
 results, and model artifacts remain subject to the licenses and attribution
 requirements of their external data sources. Consult the relevant guide under
 [data/](data/) before reusing or redistributing a derived output.
+
+# Authors
+
+* Tanja Auge [tanja.auge\@ur.de](mailto:tanja.auge\@ur.de)
+* Marinus Holitschke [marinus.holitschke\@stud.uni-regensburg.de](mailto:marinus.holitschke\@stud.uni-regensburg.de)
+* Jennifer Landes [jennifer.landes\@ur.de](mailto:jennifer.landes\@ur.de)
+* Oliver Ring [oliver.ring\@stud.uni-regensburg.de](mailto:oliver.ring\@stud.uni-regesnburg.de)
